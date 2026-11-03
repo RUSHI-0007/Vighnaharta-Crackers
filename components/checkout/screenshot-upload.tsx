@@ -9,15 +9,15 @@ interface ScreenshotUploadProps {
 
 export function ScreenshotUpload({ onFileSelect, error }: ScreenshotUploadProps) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <FileUpload
         onFileSelect={onFileSelect}
         maxSizeMB={1}
         maxWidthOrHeight={1400}
-        label="Upload UPI Payment Screenshot *"
-        description="Attach screenshot from GPay, PhonePe, or Paytm showing successful payment (Max 1 MB)"
+        label="Payment Screenshot *"
+        description="Attach screenshot from GPay, PhonePe, or Paytm showing successful payment"
       />
-      {error && <p className="text-xs text-destructive font-medium">{error}</p>}
+      {error && <p className="text-xs text-rose-400 font-medium">{error}</p>}
     </div>
   );
 }

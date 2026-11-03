@@ -1,7 +1,7 @@
 "use client";
 
 import type { PaymentMethod, Settings } from "@/types";
-import { QrCode, Banknote, Sparkles } from "lucide-react";
+import { QrCode, Banknote } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PaymentMethodSelectProps {
@@ -17,16 +17,16 @@ export function PaymentMethodSelect({
 }: PaymentMethodSelectProps) {
   const { upi_enabled, cod_enabled } = settings;
 
-  // If only one method is enabled, display static badge/card
+  // If only one method is enabled, display static card
   if (upi_enabled && !cod_enabled) {
     return (
-      <div className="rounded-2xl border border-primary/40 bg-card/80 p-4 flex items-center gap-3">
-        <div className="rounded-xl bg-primary/15 p-2.5 text-primary">
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex items-center gap-3">
+        <div className="rounded-lg bg-emerald-100 p-2 text-emerald-800">
           <QrCode className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-sm font-bold text-foreground">UPI QR Code Payment</p>
-          <p className="text-xs text-muted-foreground">Scan QR code using any UPI app and upload receipt</p>
+          <p className="text-sm font-bold text-slate-900">UPI QR Code</p>
+          <p className="text-xs text-slate-500">Scan QR using GPay, PhonePe, or Paytm and upload receipt</p>
         </div>
       </div>
     );
@@ -34,13 +34,13 @@ export function PaymentMethodSelect({
 
   if (!upi_enabled && cod_enabled) {
     return (
-      <div className="rounded-2xl border border-primary/40 bg-card/80 p-4 flex items-center gap-3">
-        <div className="rounded-xl bg-accent/15 p-2.5 text-accent">
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex items-center gap-3">
+        <div className="rounded-lg bg-amber-100 p-2 text-amber-800">
           <Banknote className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-sm font-bold text-foreground">Cash on Delivery (COD)</p>
-          <p className="text-xs text-muted-foreground">Pay in cash when your fireworks are delivered</p>
+          <p className="text-sm font-bold text-slate-900">Cash on Delivery / Pickup</p>
+          <p className="text-xs text-slate-500">Pay cash when fireworks arrive or at stall</p>
         </div>
       </div>
     );
@@ -52,29 +52,28 @@ export function PaymentMethodSelect({
       <div
         onClick={() => onChange("upi_qr")}
         className={cn(
-          "cursor-pointer rounded-2xl border p-4 flex items-start gap-3 transition-all",
+          "cursor-pointer rounded-xl border p-4 flex items-start gap-3 transition-colors",
           value === "upi_qr"
-            ? "border-amber-500 bg-amber-500/10 shadow-lg shadow-orange-500/10"
-            : "border-border/80 bg-card/60 hover:bg-card hover:border-border"
+            ? "border-emerald-500 bg-emerald-50/60 shadow-xs ring-1 ring-emerald-500"
+            : "border-slate-200 bg-slate-50/70 hover:bg-slate-100"
         )}
       >
         <div
           className={cn(
-            "rounded-xl p-2.5 shrink-0 transition-colors",
-            value === "upi_qr" ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white" : "bg-secondary text-muted-foreground"
+            "rounded-lg p-2 shrink-0 transition-colors",
+            value === "upi_qr" ? "bg-emerald-600 text-white" : "bg-slate-200 text-slate-600"
           )}
         >
           <QrCode className="h-5 w-5" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-bold text-foreground">UPI QR Code</span>
-            <span className="text-[10px] uppercase font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-              <Sparkles className="h-2.5 w-2.5" />
-              Fastest
+            <span className="text-xs sm:text-sm font-bold text-slate-900">UPI QR Code</span>
+            <span className="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">
+              Direct
             </span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1 leading-snug">
+          <p className="text-[11px] text-slate-500 mt-1 leading-snug">
             Pay via GPay, PhonePe, or Paytm and upload screenshot
           </p>
         </div>
@@ -84,24 +83,24 @@ export function PaymentMethodSelect({
       <div
         onClick={() => onChange("cod")}
         className={cn(
-          "cursor-pointer rounded-2xl border p-4 flex items-start gap-3 transition-all",
+          "cursor-pointer rounded-xl border p-4 flex items-start gap-3 transition-colors",
           value === "cod"
-            ? "border-amber-500 bg-amber-500/10 shadow-lg shadow-orange-500/10"
-            : "border-border/80 bg-card/60 hover:bg-card hover:border-border"
+            ? "border-emerald-500 bg-emerald-50/60 shadow-xs ring-1 ring-emerald-500"
+            : "border-slate-200 bg-slate-50/70 hover:bg-slate-100"
         )}
       >
         <div
           className={cn(
-            "rounded-xl p-2.5 shrink-0 transition-colors",
-            value === "cod" ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white" : "bg-secondary text-muted-foreground"
+            "rounded-lg p-2 shrink-0 transition-colors",
+            value === "cod" ? "bg-emerald-600 text-white" : "bg-slate-200 text-slate-600"
           )}
         >
           <Banknote className="h-5 w-5" />
         </div>
         <div className="flex-1 min-w-0">
-          <span className="text-sm font-bold text-foreground">Cash on Delivery</span>
-          <p className="text-xs text-muted-foreground mt-1 leading-snug">
-            Pay exact cash to delivery partner when fireworks arrive
+          <span className="text-xs sm:text-sm font-bold text-slate-900">Cash on Delivery</span>
+          <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+            Pay cash upon delivery or when collecting at stall
           </p>
         </div>
       </div>

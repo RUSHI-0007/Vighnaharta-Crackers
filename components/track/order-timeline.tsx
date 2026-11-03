@@ -10,31 +10,31 @@ interface OrderTimelineProps {
 export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
   if (status === "cancelled") {
     return (
-      <div className="rounded-2xl border border-destructive/40 bg-destructive/10 p-4 text-center space-y-2">
-        <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-destructive text-destructive-foreground">
-          <XCircle className="h-6 w-6" />
+      <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-center space-y-2">
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-rose-600 text-white">
+          <XCircle className="h-5 w-5" />
         </div>
-        <h4 className="font-heading text-base font-bold text-destructive">
-          ऑर्डर रद्द करण्यात आली आहे (Order Cancelled)
+        <h4 className="text-sm font-bold text-rose-800">
+          Order Cancelled
         </h4>
         {adminNote ? (
-          <p className="text-xs text-destructive-foreground/90 bg-destructive/20 p-2.5 rounded-xl">
-            <strong>कारण:</strong> {adminNote}
+          <p className="text-xs text-rose-900 bg-rose-100/70 p-2.5 rounded-lg max-w-md mx-auto">
+            <strong>Reason:</strong> {adminNote}
           </p>
         ) : (
-          <p className="text-xs text-muted-foreground">
-            काही अडचण किंवा पेमेंट अयशस्वी झाल्यामुळे ऑर्डर रद्द झाली आहे.
+          <p className="text-xs text-slate-500">
+            This order was cancelled due to an issue with payment verification or stock availability.
           </p>
         )}
       </div>
     );
   }
 
-  const steps: Array<{ key: OrderStatus; titleMr: string; titleEn: string; icon: typeof Clock }> = [
-    { key: "pending", titleMr: "ऑर्डर प्राप्त", titleEn: "Placed", icon: Clock },
-    { key: "confirmed", titleMr: "निश्चित झाली", titleEn: "Confirmed", icon: Check },
-    { key: "out_for_delivery", titleMr: "डिलिव्हरीसाठी रवाना", titleEn: "Out for Delivery", icon: Truck },
-    { key: "delivered", titleMr: "वितरित झाली", titleEn: "Delivered", icon: CheckCircle2 },
+  const steps: Array<{ key: OrderStatus; titleEn: string; icon: typeof Clock }> = [
+    { key: "pending", titleEn: "Placed", icon: Clock },
+    { key: "confirmed", titleEn: "Confirmed", icon: Check },
+    { key: "out_for_delivery", titleEn: "Out for Delivery", icon: Truck },
+    { key: "delivered", titleEn: "Delivered", icon: CheckCircle2 },
   ];
 
   const statusOrder: Record<string, number> = {
@@ -47,13 +47,13 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
   const currentIndex = statusOrder[status] ?? 0;
 
   return (
-    <div className="py-4">
+    <div className="py-2">
       <div className="relative flex justify-between items-center">
         {/* Progress background line */}
-        <div className="absolute top-5 left-6 right-6 h-1 bg-border/80 -z-0" />
+        <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-200 -z-0" />
         {/* Active progress bar */}
         <div
-          className="absolute top-5 left-6 h-1 bg-primary transition-all duration-500 -z-0"
+          className="absolute top-4 left-4 h-0.5 bg-emerald-600 transition-all duration-300 -z-0"
           style={{ width: `${(currentIndex / (steps.length - 1)) * 100}%` }}
         />
 
@@ -66,25 +66,22 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
             <div key={step.key} className="flex flex-col items-center relative z-10">
               <div
                 className={cn(
-                  "h-10 w-10 rounded-full flex items-center justify-center text-xs font-bold transition-all shadow-md",
+                  "h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold transition-all",
                   isCompleted
-                    ? "bg-primary text-primary-foreground ring-4 ring-background"
+                    ? "bg-emerald-600 text-white"
                     : isCurrent
-                    ? "bg-accent text-accent-foreground ring-4 ring-primary/40 animate-pulse"
-                    : "bg-secondary text-muted-foreground ring-4 ring-background"
+                    ? "bg-amber-500 text-white ring-2 ring-amber-300"
+                    : "bg-slate-200 text-slate-400"
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-3.5 w-3.5" />
               </div>
               <span
                 className={cn(
-                  "mt-2 text-center text-[11px] font-bold leading-tight max-w-[70px]",
-                  isCurrent ? "text-accent" : isCompleted ? "text-foreground" : "text-muted-foreground"
+                  "mt-1.5 text-center text-[11px] font-medium leading-tight",
+                  isCurrent ? "text-amber-800 font-bold" : isCompleted ? "text-emerald-700 font-bold" : "text-slate-400"
                 )}
               >
-                {step.titleMr}
-              </span>
-              <span className="text-[9px] text-muted-foreground hidden sm:block">
                 {step.titleEn}
               </span>
             </div>
@@ -94,4 +91,3 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
     </div>
   );
 }
-

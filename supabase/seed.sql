@@ -1,9 +1,4 @@
--- ==============================================================================
--- Seed: seed.sql
--- Project: Vighnaharta Fataka Stall (विघ्नहर्ता फटाका स्टॉल)
--- NOTE: ALL PRODUCT PRICES ARE PLACEHOLDERS FOR DEMO/DEVELOPMENT PURPOSES.
--- REPLACE WITH REAL WHOLESALE PRICES IN SUPABASE OR VIA ADMIN DASHBOARD.
--- ==============================================================================
+
 
 -- 1. Insert Initial Settings
 INSERT INTO settings (id, upi_enabled, cod_enabled, upi_id, qr_image_path, min_order_amount, accepting_orders, delivery_note)
@@ -42,7 +37,7 @@ INSERT INTO products (id, category_id, slug, name_en, name_mr, description, pric
 VALUES
   -- Category 1: Sparklers (फुलबाजे)
   (
-    'p1000000-0000-0000-0000-000000000001',
+    'a1000000-0000-0000-0000-000000000001',
     'c1000000-0000-0000-0000-000000000001',
     'electric-sparklers-10cm',
     '10 cm Electric Sparklers',
@@ -51,7 +46,7 @@ VALUES
     60, 20, 'Box of 10', NULL, true, true
   ),
   (
-    'p1000000-0000-0000-0000-000000000002',
+    'a1000000-0000-0000-0000-000000000002',
     'c1000000-0000-0000-0000-000000000001',
     'colour-sparklers-15cm',
     '15 cm Colour Sparklers',
@@ -60,7 +55,7 @@ VALUES
     90, 25, 'Box of 10', NULL, true, false
   ),
   (
-    'p1000000-0000-0000-0000-000000000003',
+    'a1000000-0000-0000-0000-000000000003',
     'c1000000-0000-0000-0000-000000000001',
     'giant-sparklers-30cm',
     '30 cm Giant Sparklers',
@@ -71,7 +66,7 @@ VALUES
 
   -- Category 2: Flower Pots (अनार)
   (
-    'p1000000-0000-0000-0000-000000000004',
+    'a1000000-0000-0000-0000-000000000004',
     'c1000000-0000-0000-0000-000000000002',
     'standard-flower-pot',
     'Flower Pots Standard',
@@ -80,7 +75,7 @@ VALUES
     150, 20, 'Box of 10', NULL, true, true
   ),
   (
-    'p1000000-0000-0000-0000-000000000005',
+    'a1000000-0000-0000-0000-000000000005',
     'c1000000-0000-0000-0000-000000000002',
     'special-colour-koti',
     'Special Colour Koti',
@@ -89,7 +84,7 @@ VALUES
     240, 25, 'Box of 10', NULL, true, false
   ),
   (
-    'p1000000-0000-0000-0000-000000000006',
+    'a1000000-0000-0000-0000-000000000006',
     'c1000000-0000-0000-0000-000000000002',
     'deluxe-mega-fountain',
     'Deluxe Mega Fountain',
@@ -100,7 +95,7 @@ VALUES
 
   -- Category 3: Ground Chakkars (भुईचक्र)
   (
-    'p1000000-0000-0000-0000-000000000007',
+    'a1000000-0000-0000-0000-000000000007',
     'c1000000-0000-0000-0000-000000000003',
     'ground-chakkar-special',
     'Ground Chakkar Special',
@@ -109,7 +104,7 @@ VALUES
     120, 20, 'Box of 10', NULL, true, true
   ),
   (
-    'p1000000-0000-0000-0000-000000000008',
+    'a1000000-0000-0000-0000-000000000008',
     'c1000000-0000-0000-0000-000000000003',
     'deluxe-spinning-wheel',
     'Deluxe Spinning Wheel',
@@ -120,7 +115,7 @@ VALUES
 
   -- Category 4: Rockets (रॉकेट)
   (
-    'p1000000-0000-0000-0000-000000000009',
+    'a1000000-0000-0000-0000-000000000009',
     'c1000000-0000-0000-0000-000000000004',
     'whistling-rocket',
     'Whistling Sound Rocket',
@@ -129,7 +124,7 @@ VALUES
     220, 20, 'Box of 10', NULL, true, false
   ),
   (
-    'p1000000-0000-0000-0000-000000000010',
+    'a1000000-0000-0000-0000-000000000010',
     'c1000000-0000-0000-0000-000000000004',
     'lunik-colour-rocket',
     'Lunik Parachute Rocket',
@@ -140,7 +135,7 @@ VALUES
 
   -- Category 5: Sound Crackers (आवाज फटाके)
   (
-    'p1000000-0000-0000-0000-000000000011',
+    'a1000000-0000-0000-0000-000000000011',
     'c1000000-0000-0000-0000-000000000005',
     '2-sound-cracker',
     '2 Sound Cracker',
@@ -149,7 +144,7 @@ VALUES
     100, 15, 'Box of 10', NULL, true, false
   ),
   (
-    'p1000000-0000-0000-0000-000000000012',
+    'a1000000-0000-0000-0000-000000000012',
     'c1000000-0000-0000-0000-000000000005',
     'red-fort-lad-1000',
     'Red Fort 1000 Crackers',
@@ -158,7 +153,7 @@ VALUES
     450, 30, '1 Piece', NULL, true, true
   ),
   (
-    'p1000000-0000-0000-0000-000000000013',
+    'a1000000-0000-0000-0000-000000000013',
     'c1000000-0000-0000-0000-000000000005',
     'hydro-bomb-green',
     'Green Hydro Bomb',
@@ -169,7 +164,7 @@ VALUES
 
   -- Category 6: Sky Shots (स्काय शॉट्स)
   (
-    'p1000000-0000-0000-0000-000000000014',
+    'a1000000-0000-0000-0000-000000000014',
     'c1000000-0000-0000-0000-000000000006',
     'single-sky-shot-colour',
     'Single Sky Shot Colour',
@@ -178,7 +173,7 @@ VALUES
     90, 20, '1 Pipe', NULL, true, false
   ),
   (
-    'p1000000-0000-0000-0000-000000000015',
+    'a1000000-0000-0000-0000-000000000015',
     'c1000000-0000-0000-0000-000000000006',
     '12-shots-multi-colour',
     '12 Shots Multi-Colour Aerial',
@@ -189,7 +184,7 @@ VALUES
 
   -- Category 7: Gift Boxes (फॅमिली गिफ्ट बॉक्स)
   (
-    'p1000000-0000-0000-0000-000000000016',
+    'a1000000-0000-0000-0000-000000000016',
     'c1000000-0000-0000-0000-000000000007',
     'diwali-family-mega-box',
     'Diwali Family Mega Gift Box (25 Items)',

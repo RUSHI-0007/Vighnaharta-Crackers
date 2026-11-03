@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { TrackForm } from "@/components/track/track-form";
 import { Suspense } from "react";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "ऑर्डर ट्रॅक करा (Track Order) | विघ्नहर्ता फटाका स्टॉल",
-  description: "आपल्या फटाक्यांच्या ऑर्डरची सद्यस्थिती तपासा.",
+  title: `Track Your Order | ${siteConfig.name.en}`,
+  description: "Check the status and delivery updates of your firecracker order.",
   robots: {
     index: false,
     follow: false,
@@ -22,20 +23,21 @@ async function TrackContent({ searchParams }: TrackPageProps) {
 
 export default function TrackPage({ searchParams }: TrackPageProps) {
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-12 text-center">
-      <div className="mb-8 space-y-2">
-        <h1 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">
-          ऑर्डर ट्रॅक करा (Track Your Order)
-        </h1>
-        <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
-          आपला ऑर्डर कोड आणि नोंदणीकृत मोबाईल नंबर टाकून सद्यस्थिती तपासा.
-        </p>
-      </div>
+    <div className="bg-[#f8fafc] min-h-[calc(100vh-160px)] py-8 sm:py-12">
+      <div className="container mx-auto max-w-2xl px-4 sm:px-6 text-center">
+        <div className="mb-6 space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            Track Your Order
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+            Enter your order tracking code and registered phone number to view live status.
+          </p>
+        </div>
 
-      <Suspense fallback={<div className="py-12 text-muted-foreground">लोड होत आहे...</div>}>
-        <TrackContent searchParams={searchParams} />
-      </Suspense>
+        <Suspense fallback={<div className="py-12 text-slate-400 text-xs">Loading order details...</div>}>
+          <TrackContent searchParams={searchParams} />
+        </Suspense>
+      </div>
     </div>
   );
 }
-

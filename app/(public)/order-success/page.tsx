@@ -3,9 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { Confetti } from "@/components/ui/confetti";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, PackageSearch, Phone, Sparkles, Mail } from "lucide-react";
+import { CheckCircle2, PackageSearch, Phone, ArrowRight } from "lucide-react";
 import { Suspense } from "react";
 
 function OrderSuccessContent() {
@@ -15,20 +14,19 @@ function OrderSuccessContent() {
 
   if (!code) {
     return (
-      <div className="container mx-auto max-w-lg px-4 py-16 text-center">
-        <span className="text-5xl block mb-3">🔍</span>
-        <h1 className="font-heading text-2xl font-bold text-foreground">
-          कोणताही ऑर्डर कोड आढळला नाही
+      <div className="container mx-auto max-w-lg px-4 py-16 text-center space-y-4">
+        <h1 className="text-xl font-bold text-slate-900">
+          No Order Code Found
         </h1>
-        <p className="text-xs text-muted-foreground mt-2 mb-6">
-          आपण थेट या पृष्ठावर आला आहात. कृपया आपल्या ऑर्डरचा मागोवा घेण्यासाठी ट्रॅकिंग पेज वापरा.
+        <p className="text-xs text-slate-500">
+          Please visit the tracking page to view your existing order.
         </p>
         <div className="flex justify-center gap-3">
           <Link href="/">
-            <Button variant="outline">मुख्यपृष्ठ</Button>
+            <Button variant="outline">Homepage</Button>
           </Link>
           <Link href="/track">
-            <Button>ऑर्डर ट्रॅक करा</Button>
+            <Button className="bg-red-700 hover:bg-red-800 text-white font-bold">Track Order</Button>
           </Link>
         </div>
       </div>
@@ -37,71 +35,71 @@ function OrderSuccessContent() {
 
   return (
     <div className="container mx-auto max-w-xl px-4 py-12 text-center">
-      <Confetti />
-
-      <div className="rounded-3xl border border-primary/30 bg-card p-6 sm:p-10 shadow-2xl space-y-6">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 shadow-2xs">
         {/* Success Icon */}
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-          <CheckCircle2 className="h-8 w-8" />
+        <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 border border-emerald-200">
+          <CheckCircle2 className="h-7 w-7" />
         </div>
 
         {/* Title */}
-        <div className="space-y-1.5">
-          <h1 className="font-heading text-2xl sm:text-3xl font-bold text-foreground">
-            ऑर्डर यशस्वीरीत्या नोंदवली गेली!
+        <div className="space-y-1">
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+            Order Placed Successfully!
           </h1>
-          <p className="text-xs sm:text-sm text-accent font-medium">
-            दिवाळी फटाके खरेदीबद्दल आपले मनःपूर्वक आभार!
+          <p className="text-xs sm:text-sm text-slate-500">
+            Thank you for shopping with {siteConfig.name.en} ({siteConfig.name.mr}).
           </p>
         </div>
 
         {/* Order Code Box */}
-        <div className="rounded-2xl border border-primary/40 bg-primary/10 p-4 space-y-1">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-            तुमचा ऑर्डर क्रमांक (Order Code)
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 p-4 space-y-1">
+          <span className="text-[11px] font-bold text-emerald-800 block uppercase tracking-wider">
+            Your Order Tracking Code
           </span>
-          <p className="font-mono text-2xl sm:text-3xl font-extrabold text-primary tracking-wider">
+          <p className="font-mono text-2xl sm:text-3xl font-black text-slate-900 tracking-wider">
             {code}
           </p>
+          <span className="text-[11px] text-slate-500 block">
+            Please keep or screenshot this code to track your order
+          </span>
         </div>
 
-        {/* Details & Email notice */}
-        <div className="space-y-2 text-xs text-muted-foreground leading-relaxed">
+        {/* Email notice */}
+        <div className="text-xs text-slate-600 space-y-1 bg-slate-50 p-3 rounded-lg border border-slate-200">
           {email && (
-            <div className="inline-flex items-center gap-2 rounded-xl bg-secondary/80 border border-border px-3.5 py-2 text-foreground font-medium">
-              <Mail className="h-4 w-4 text-primary shrink-0" />
-              <span>ऑर्डरची संपूर्ण पावती <strong>{email}</strong> वर पाठवण्यात आली आहे.</span>
-            </div>
+            <p>
+              An itemized confirmation receipt has been sent to <strong className="text-slate-900">{email}</strong>.
+            </p>
           )}
-          <p>
-            आम्ही आपली ऑर्डर तपासून लवकरच आपल्या मोबाईल नंबरवर संपर्क करू.
+          <p className="text-[11px] text-slate-500">
+            Akshay Bendbhar will verify your order details and call you before pickup or delivery.
           </p>
         </div>
 
         {/* Action Buttons */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link href={`/track?code=${code}`} className="w-full sm:w-auto">
-            <Button className="w-full gap-2">
+            <Button className="w-full gap-2 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs sm:text-sm px-5 py-2.5 shadow-xs">
               <PackageSearch className="h-4 w-4" />
-              <span>ऑर्डर ट्रॅक करा (Track Order)</span>
+              <span>Track Live Status</span>
             </Button>
           </Link>
 
           <a href={`tel:${siteConfig.phone}`} className="w-full sm:w-auto">
-            <Button variant="outline" className="w-full gap-2">
-              <Phone className="h-4 w-4 text-primary" />
-              <span>दुकानदाराला कॉल करा</span>
+            <Button variant="outline" className="w-full gap-2 rounded-xl border-slate-200 bg-white text-slate-800 font-bold text-xs sm:text-sm px-5 py-2.5 hover:bg-slate-50">
+              <Phone className="h-4 w-4 text-red-700" />
+              <span>Call Stall ({siteConfig.phone})</span>
             </Button>
           </a>
         </div>
 
-        <div className="pt-4 border-t border-border/50">
+        <div className="pt-4 border-t border-slate-100">
           <Link
             href="/shop"
-            className="text-xs text-primary font-semibold hover:underline inline-flex items-center gap-1"
+            className="text-xs text-red-700 font-bold hover:underline inline-flex items-center gap-1"
           >
-            <Sparkles className="h-3 w-3" />
-            <span>आणखी फटाके खरेदी करा &rarr;</span>
+            <span>Continue Shopping</span>
+            <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
       </div>
@@ -111,8 +109,10 @@ function OrderSuccessContent() {
 
 export default function OrderSuccessPage() {
   return (
-    <Suspense fallback={<div className="container mx-auto py-16 text-center text-muted-foreground">लोड होत आहे...</div>}>
-      <OrderSuccessContent />
-    </Suspense>
+    <div className="bg-[#f8fafc] min-h-[calc(100vh-160px)] py-6 sm:py-10">
+      <Suspense fallback={<div className="py-16 text-center text-slate-400 text-xs">Loading order confirmation...</div>}>
+        <OrderSuccessContent />
+      </Suspense>
+    </div>
   );
 }

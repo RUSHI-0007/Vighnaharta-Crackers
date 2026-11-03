@@ -2,17 +2,17 @@ import { Banknote, PhoneCall } from "lucide-react";
 
 export function CodNotice({ totalFormatted }: { totalFormatted: string }) {
   return (
-    <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-200 space-y-2.5 shadow-sm">
-      <div className="flex items-center gap-2 font-bold text-amber-300 text-sm">
-        <Banknote className="h-4 w-4" />
-        <span>Cash on Delivery (COD) Instructions</span>
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 text-xs text-slate-600 space-y-2 shadow-2xs">
+      <div className="flex items-center gap-2 font-bold text-slate-900 text-sm">
+        <Banknote className="h-4 w-4 text-emerald-700" />
+        <span>Cash on Delivery Notice</span>
       </div>
-      <p className="leading-relaxed">
-        Please keep the exact cash amount of <strong>{totalFormatted}</strong> ready to hand over to our delivery partner upon receipt of your firecrackers.
+      <p className="leading-relaxed text-slate-600">
+        Please keep the exact cash amount of <strong className="text-slate-900 font-mono">{totalFormatted}</strong> ready for the delivery partner or when collecting your package at the stall.
       </p>
-      <div className="flex items-center gap-2 text-amber-300/90 font-medium pt-1">
-        <PhoneCall className="h-3.5 w-3.5 text-amber-400 shrink-0" />
-        <span>Our stall team will call your mobile number before packing and dispatching your order.</span>
+      <div className="flex items-center gap-2 text-slate-500 pt-1 border-t border-slate-100">
+        <PhoneCall className="h-3.5 w-3.5 text-red-700 shrink-0" />
+        <span>Akshay Bendbhar will call you on your mobile number to confirm before dispatch.</span>
       </div>
     </div>
   );

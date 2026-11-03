@@ -1,116 +1,103 @@
 import { siteConfig } from "@/config/site";
-import { MapPin, Phone, ExternalLink, Clock, Store, Sparkles, CheckCircle2 } from "lucide-react";
+import { Tag, Truck, Gift, ShieldCheck, Phone, MessageCircle } from "lucide-react";
 
 export function VisitUs() {
   return (
-    <section className="py-12 md:py-16 bg-gradient-to-b from-transparent via-secondary/20 to-transparent">
-      <div className="container mx-auto max-w-6xl px-4">
-        <div className="rounded-3xl border border-border/80 bg-gradient-to-br from-[#0e153b] to-[#090d29] p-6 sm:p-10 md:p-12 overflow-hidden relative shadow-2xl">
-          
-          {/* Subtle background glow */}
-          <div className="absolute top-0 right-1/4 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+    <section className="py-10 sm:py-14 bg-slate-50">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 space-y-10">
+        
+        {/* Stall Notice & Direct WhatsApp Callout Banner (like Anil Crackers Screenshot 3) */}
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white p-6 sm:p-10 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
             
-            {/* Left Column: Stall details */}
-            <div className="lg:col-span-7 space-y-5">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
-                <Store className="h-3.5 w-3.5" />
-                <span>Visit Our Physical Stall</span>
-              </div>
-
-              <div className="space-y-2">
-                <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
-                  Experience Fireworks in Person at Our Stall
-                </h2>
-                <p className="text-xs sm:text-sm text-amber-300 font-medium">
-                  {siteConfig.name.mr} • संचालक: {siteConfig.owner.mr} ({siteConfig.owner.en})
-                </p>
-              </div>
-
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Visit with your family to browse our complete collection of genuine Sivakasi fireworks at factory wholesale rates. Take advantage of festive combo offers, bulk box deals, and personalized recommendations.
+            <div className="md:col-span-8 space-y-2 text-center md:text-left">
+              <span className="inline-block bg-amber-400 text-emerald-950 text-[10px] font-black uppercase px-2 py-0.5 rounded tracking-wider">
+                Direct Stall Contact
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black text-white">
+                Shop Diwali Crackers & Celebrate with Joy
+              </h3>
+              <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed max-w-xl">
+                Get genuine Sivakasi firecrackers at factory wholesale rates for your family, society, and Diwali celebrations. Call or WhatsApp Akshay Bendbhar directly for questions or bulk bookings.
               </p>
-
-              <div className="space-y-3.5 pt-2 text-xs sm:text-sm">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0 mt-0.5">
-                    <MapPin className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <strong className="block text-foreground font-semibold">Stall Address:</strong>
-                    <span className="text-muted-foreground">{siteConfig.address.en}</span>
-                    <span className="block text-xs text-amber-400/80 mt-0.5">({siteConfig.address.mr})</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 shrink-0">
-                    <Clock className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <strong className="text-foreground font-semibold">Operating Hours:</strong>
-                    <span className="text-muted-foreground ml-2">8:00 AM to 10:00 PM (All 7 Days)</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 shrink-0">
-                    <CheckCircle2 className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <strong className="text-foreground font-semibold">Payment Accepted:</strong>
-                    <span className="text-muted-foreground ml-2">Cash, Google Pay, PhonePe, Paytm UPI</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 pt-3">
-                <a
-                  href={`tel:${siteConfig.phone}`}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-xs sm:text-sm font-bold text-white hover:bg-primary/90 active:scale-95 transition-all shadow-lg shadow-orange-500/25 min-h-[46px]"
-                >
-                  <Phone className="h-4 w-4" />
-                  <span>Call {siteConfig.phone}</span>
-                </a>
-
-                <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent(siteConfig.mapsQuery)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-border/80 bg-secondary/80 px-5 py-3 text-xs sm:text-sm font-bold text-foreground hover:bg-secondary active:scale-95 transition-all min-h-[46px]"
-                >
-                  <MapPin className="h-4 w-4 text-accent" />
-                  <span>Open in Google Maps</span>
-                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
-                </a>
-              </div>
             </div>
 
-            {/* Right Column: Stall Banner Image Presentation */}
-            <div className="lg:col-span-5">
-              <div className="relative group rounded-2xl overflow-hidden border border-border/80 bg-black/60 shadow-2xl">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/banner.png"
-                  alt={`${siteConfig.name.en} Stall Banner`}
-                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-4 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1.5 text-amber-300 font-medium">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    <span>Official Stall Banner</span>
-                  </div>
-                  <span className="text-[11px] text-white/80 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded-md font-mono">
-                    Ganegaon Khalsa
-                  </span>
-                </div>
-              </div>
+            <div className="md:col-span-4 flex flex-col sm:flex-row md:flex-col gap-2.5 justify-center">
+              <a
+                href={`https://wa.me/91${siteConfig.phone}?text=${encodeURIComponent("Hello Akshay, I would like to order crackers from Vighnaharta Fataka Stall.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs sm:text-sm px-4 py-2.5 shadow-sm transition-colors"
+              >
+                <MessageCircle className="h-4 w-4 fill-emerald-950" />
+                <span>WhatsApp: {siteConfig.phone}</span>
+              </a>
+
+              <a
+                href={`tel:${siteConfig.phone}`}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold text-xs px-4 py-2.5 border border-white/20 transition-colors"
+              >
+                <Phone className="h-4 w-4 text-amber-300" />
+                <span>Call Akshay Bendbhar</span>
+              </a>
             </div>
 
           </div>
         </div>
+
+        {/* 4 Feature Badges (Matching Anil Crackers Screenshot 3) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex items-start gap-3.5">
+            <div className="h-10 w-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100">
+              <Tag className="h-5 w-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-slate-900">Best Prices & Offers</h4>
+              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                Direct wholesale rates with up to 50% discount on Sivakasi fireworks.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex items-start gap-3.5">
+            <div className="h-10 w-10 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-100">
+              <Truck className="h-5 w-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-slate-900">Door Delivery & Pickup</h4>
+              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                Stall pickup in 30 mins or doorstep delivery in Ganegaon & nearby areas.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex items-start gap-3.5">
+            <div className="h-10 w-10 rounded-lg bg-rose-50 text-rose-700 flex items-center justify-center shrink-0 border border-rose-100">
+              <Gift className="h-5 w-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-slate-900">Diwali Special Deals</h4>
+              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                Special combo family packs & seasonal assortment packages.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-2xs flex items-start gap-3.5">
+            <div className="h-10 w-10 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center shrink-0 border border-sky-100">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-slate-900">Wide Crackers Collection</h4>
+              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                100% genuine Sivakasi fireworks certified for safety and quality.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </section>
   );

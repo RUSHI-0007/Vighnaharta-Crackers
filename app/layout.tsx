@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#070A1E",
+  themeColor: "#f59e0b",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -45,20 +45,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${yatraOne.variable} ${mukta.variable} dark`}>
-      <body className="antialiased min-h-screen bg-background text-foreground flex flex-col font-body selection:bg-primary/30 selection:text-white">
+    <html lang="en" className={`${yatraOne.variable} ${mukta.variable}`}>
+      <body className="antialiased min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-body selection:bg-red-600 selection:text-white">
         {children}
         <Toaster
           position="top-center"
           richColors
-          toastOptions={{
-            style: {
-              background: "#0E1538",
-              borderColor: "#283573",
-              color: "#F8F7F2",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-            },
-          }}
         />
       </body>
     </html>

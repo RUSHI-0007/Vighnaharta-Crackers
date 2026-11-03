@@ -1,160 +1,101 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
-import { Particles } from "@/components/ui/particles";
-import { Phone, ArrowRight, ShieldCheck, Flame, Sparkles, MapPin, CheckCircle2, Clock } from "lucide-react";
+import { ShoppingBag, FileSpreadsheet, Phone, MapPin, Sparkles } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden border-b border-border/60 py-12 md:py-16 lg:py-20">
-      {/* Background fireworks sparks/particles */}
-      <Particles quantity={45} color="#F59E0B" className="opacity-80" />
+    <section className="bg-gradient-to-b from-amber-500/10 via-amber-500/5 to-white border-b border-slate-200">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-10">
+        
+        {/* Festive Banner Card */}
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-amber-600 via-orange-600 to-red-700 text-white shadow-md">
+          {/* Subtle decorative background pattern */}
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
 
-      {/* Atmospheric lighting glows */}
-      <div className="absolute top-1/4 -left-20 h-96 w-96 rounded-full bg-gradient-to-br from-amber-500/15 to-orange-600/10 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 right-0 h-96 w-96 rounded-full bg-gradient-to-tl from-rose-500/10 to-amber-400/15 blur-3xl pointer-events-none" />
+          <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 sm:p-10 items-center">
+            
+            {/* Left Column: Festive Message & Direct Stall Details */}
+            <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-xs px-3 py-1 text-xs font-semibold text-amber-100 border border-white/20">
+                <Sparkles className="h-3.5 w-3.5 text-amber-200" />
+                <span>Diwali Festival Wholesale 2026</span>
+              </div>
 
-      <div className="container relative z-10 mx-auto max-w-6xl px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          {/* Left Column: Typography & CTAs */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            {/* Festive Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-bold text-amber-300 shadow-sm shadow-amber-500/10 backdrop-blur-md">
-              <span className="text-sm">🪔</span>
-              <span className="tracking-wide uppercase">Diwali 2026 Mega Sale • Sivakasi Wholesale</span>
-            </div>
+              <div className="space-y-1">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white uppercase drop-shadow-xs">
+                  {siteConfig.name.en}
+                </h1>
+                <p className="text-lg sm:text-2xl font-bold text-amber-200 font-sans">
+                  {siteConfig.name.mr}
+                </p>
+                <p className="text-xs sm:text-sm text-amber-100/90 font-medium">
+                  संचालक: <strong>{siteConfig.owner.mr}</strong> ({siteConfig.owner.en}) • फोन: <strong>{siteConfig.phone}</strong>
+                </p>
+              </div>
 
-            {/* Main Headline */}
-            <div className="space-y-2">
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
-                Light Up Your Diwali With{" "}
-                <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 bg-clip-text text-transparent">
-                  Wholesale Fireworks
-                </span>
-              </h1>
-              <p className="font-heading text-lg sm:text-xl text-amber-300/90 font-medium pt-1">
-                {siteConfig.name.mr} ({siteConfig.name.en})
+              <p className="text-xs sm:text-sm text-white/95 leading-relaxed max-w-xl">
+                १००% ओरिजिनल शिवाकाशी फटाके थेट होलसेल दरात! लहान मुलांचे फुलबाजे, भुईचक्र, आवाज फटाके, आकाशीय स्काय शॉट्स आणि फॅमिली गिफ्ट बॉक्सेस उपलब्ध.
               </p>
-            </div>
 
-            {/* Value Proposition */}
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xl">
-              Authentic Sivakasi sparklers, rockets, ground chakkars, aerial sky shots, and grand family gift boxes at guaranteed wholesale rates. Order online for quick stall pickup or local doorstep delivery!
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
-              <Link href="/shop">
-                <ShimmerButton className="text-sm font-bold shadow-xl shadow-orange-500/25 px-6 py-3.5">
-                  <Flame className="h-4 w-4 mr-2 text-amber-200 fill-current" />
-                  <span>Explore Fireworks Collection</span>
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </ShimmerButton>
-              </Link>
-
-              <a
-                href={`tel:${siteConfig.phone}`}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border/80 bg-card/80 px-5 py-3 text-sm font-semibold text-foreground hover:bg-secondary hover:text-white active:scale-95 transition-all min-h-[48px] shadow-sm"
-              >
-                <Phone className="h-4 w-4 text-primary" />
-                <span>Call {siteConfig.phone}</span>
-              </a>
-            </div>
-
-            {/* Trust Highlights Grid */}
-            <div className="pt-6 border-t border-border/40 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span className="font-medium text-foreground/90">100% Genuine Sivakasi</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
-                <span className="font-medium text-foreground/90">Up to 35% Wholesale Off</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-primary shrink-0" />
-                <span className="font-medium text-foreground/90">Local Ganegaon Pickup</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-rose-400 shrink-0" />
-                <span className="font-medium text-foreground/90">UPI & COD Available</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Festive Stall Showcase Card */}
-          <div className="lg:col-span-5">
-            <div className="relative group rounded-3xl border border-border/80 bg-gradient-to-b from-[#111947] to-[#0A0E29] p-4 sm:p-5 shadow-2xl shadow-black/60 overflow-hidden">
-              
-              {/* Top Status Bar */}
-              <div className="flex items-center justify-between pb-3 mb-3 border-b border-border/60 text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="font-bold text-foreground">Stall Open Daily</span>
-                  <span className="text-[11px] text-muted-foreground">(8 AM – 10 PM)</span>
-                </div>
-                <span className="rounded-full bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-[10px] font-bold text-primary">
-                  Ganegaon Khalsa
-                </span>
-              </div>
-
-              {/* Banner Graphic Showcase */}
-              <div className="relative rounded-2xl overflow-hidden border border-border bg-black/40 aspect-[16/10] shadow-inner mb-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/banner.png"
-                  alt={`${siteConfig.name.mr} Banner`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3 sm:p-4">
-                  <div>
-                    <p className="text-white font-heading text-base sm:text-lg font-bold drop-shadow">
-                      {siteConfig.name.mr}
-                    </p>
-                    <p className="text-[11px] text-amber-300 font-medium drop-shadow">
-                      {siteConfig.tagline.en}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Perks Strip */}
-              <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                <div className="rounded-xl bg-secondary/50 border border-border/60 p-2.5">
-                  <span className="block font-heading text-base font-bold text-amber-400">35%</span>
-                  <span className="text-[10px] text-muted-foreground font-medium">Max Savings</span>
-                </div>
-                <div className="rounded-xl bg-secondary/50 border border-border/60 p-2.5">
-                  <span className="block font-heading text-base font-bold text-primary">100+</span>
-                  <span className="text-[10px] text-muted-foreground font-medium">Varieties</span>
-                </div>
-                <div className="rounded-xl bg-secondary/50 border border-border/60 p-2.5">
-                  <span className="block font-heading text-base font-bold text-emerald-400">Local</span>
-                  <span className="text-[10px] text-muted-foreground font-medium">Free Delivery</span>
-                </div>
-              </div>
-
-              {/* Direct Location Link */}
-              <div className="mt-3 pt-3 border-t border-border/40 flex items-center justify-between text-xs text-muted-foreground">
-                <div className="flex items-center gap-1.5 truncate">
-                  <MapPin className="h-3.5 w-3.5 text-accent shrink-0" />
-                  <span className="truncate">{siteConfig.address.en}</span>
-                </div>
-                <a
-                  href={`https://maps.google.com/?q=${encodeURIComponent(siteConfig.mapsQuery)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline font-bold shrink-0 ml-2"
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-2">
+                <Link
+                  href="/shop"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-red-800 font-bold text-xs sm:text-sm px-5 py-3 hover:bg-amber-50 shadow-sm transition-all"
                 >
-                  View Map &rarr;
+                  <ShoppingBag className="h-4 w-4 text-red-700" />
+                  <span>Buy Crackers (Full Catalog)</span>
+                </Link>
+
+                <Link
+                  href="/price-list"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-5 py-3 shadow-sm transition-all border border-emerald-500"
+                >
+                  <FileSpreadsheet className="h-4 w-4" />
+                  <span>Quick Shop / Price List</span>
+                </Link>
+
+                <a
+                  href={`tel:${siteConfig.phone}`}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-black/25 hover:bg-black/40 text-white font-semibold text-xs px-4 py-3 border border-white/20 transition-all"
+                >
+                  <Phone className="h-4 w-4 text-amber-300" />
+                  <span>Call {siteConfig.phone}</span>
                 </a>
               </div>
 
+              <div className="pt-2 flex items-center justify-center lg:justify-start gap-2 text-[11px] text-amber-100">
+                <MapPin className="h-3.5 w-3.5 text-amber-300 shrink-0" />
+                <span>स्टॉल पत्ता: ग्रामपंचायत समोर, गणेगाव खालसा (Ganegaon Khalsa)</span>
+              </div>
             </div>
-          </div>
 
+            {/* Right Column: Real Stall Banner Card */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative rounded-xl overflow-hidden bg-black/30 border-2 border-amber-300/40 shadow-xl max-w-sm w-full">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/banner.png"
+                  alt={`${siteConfig.name.en} Stall Photo`}
+                  className="w-full h-auto object-cover"
+                />
+                <div className="p-2.5 bg-black/60 backdrop-blur-xs text-[11px] text-amber-100 flex items-center justify-between">
+                  <span>स्टॉल वेळ: <strong>८:०० AM ते १०:०० PM</strong></span>
+                  <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(siteConfig.mapsQuery)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-amber-300 hover:underline font-bold"
+                  >
+                    Google Maps &rarr;
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
+
       </div>
     </section>
   );
