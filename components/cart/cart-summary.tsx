@@ -27,22 +27,22 @@ export function CartSummary({ settings, onCheckoutClick }: CartSummaryProps) {
   const isOrdersDisabled = !settings.accepting_orders;
 
   return (
-    <div className="space-y-3 pt-4 border-t border-border/80">
+    <div className="space-y-3 pt-4 border-t border-[#e9e0d5]">
       {/* Subtotal & Discount breakdown */}
       <div className="space-y-1.5 text-xs">
-        <div className="flex justify-between text-muted-foreground">
+        <div className="flex justify-between text-[#737373]">
           <span>MRP Subtotal</span>
-          <span>{formatCurrency(subtotal)}</span>
+          <span className="font-mono text-[#202d3a]">{formatCurrency(subtotal)}</span>
         </div>
         {discountTotal > 0 && (
-          <div className="flex justify-between text-emerald-400 font-semibold">
+          <div className="flex justify-between text-[#b91c32] font-semibold">
             <span>Wholesale Discount Savings</span>
-            <span>-{formatCurrency(discountTotal)}</span>
+            <span className="font-mono">-{formatCurrency(discountTotal)}</span>
           </div>
         )}
-        <div className="flex justify-between items-baseline text-base font-bold text-foreground pt-1.5 border-t border-border/50">
+        <div className="flex justify-between items-baseline text-base font-bold text-[#202d3a] pt-2 border-t border-[#e9e0d5]">
           <span>Total Payable Amount</span>
-          <span className="text-amber-400 font-heading text-xl">
+          <span className="text-[#b91c32] font-mono text-xl font-black">
             ₹<NumberTicker value={total} />
           </span>
         </div>
@@ -50,7 +50,7 @@ export function CartSummary({ settings, onCheckoutClick }: CartSummaryProps) {
 
       {/* Warnings */}
       {isOrdersDisabled && (
-        <div className="rounded-2xl bg-destructive/15 border border-destructive/30 p-3 text-xs text-destructive flex items-start gap-2">
+        <div className="rounded-xl bg-[#fbecef] border border-[#b91c32]/30 p-3 text-xs text-[#b91c32] flex items-start gap-2">
           <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
           <span>
             We are temporarily not accepting new online orders. Please call us directly or visit our stall!
@@ -59,10 +59,11 @@ export function CartSummary({ settings, onCheckoutClick }: CartSummaryProps) {
       )}
 
       {!isOrdersDisabled && isBelowMin && (
-        <div className="rounded-2xl bg-amber-500/15 border border-amber-500/30 p-3 text-xs text-amber-300 flex items-start gap-2">
-          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+        <div className="rounded-xl bg-[#fff9f0] border border-[#e9b94f]/50 p-3 text-xs text-[#202d3a] flex items-start gap-2">
+          <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-[#b91c32]" />
           <span>
-            Minimum order amount is {formatCurrency(settings.min_order_amount)}. Please add {formatCurrency(settings.min_order_amount - total)} more of firecrackers.
+            Minimum order amount is {formatCurrency(settings.min_order_amount)}. Please add{" "}
+            {formatCurrency(settings.min_order_amount - total)} more of firecrackers.
           </span>
         </div>
       )}
@@ -72,7 +73,7 @@ export function CartSummary({ settings, onCheckoutClick }: CartSummaryProps) {
         <Link
           href="/checkout"
           onClick={onCheckoutClick}
-          className="w-full min-h-[48px] rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white font-bold text-sm flex items-center justify-center gap-2 hover:opacity-95 active:scale-98 transition-all shadow-xl shadow-orange-500/25 cursor-pointer"
+          className="w-full min-h-[46px] rounded-xl bg-[#b91c32] hover:bg-[#981426] text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-xs cursor-pointer"
         >
           <span>Proceed to Checkout</span>
           <ArrowRight className="h-4 w-4" />
@@ -81,14 +82,14 @@ export function CartSummary({ settings, onCheckoutClick }: CartSummaryProps) {
         <button
           type="button"
           disabled
-          className="w-full min-h-[48px] rounded-2xl bg-muted text-muted-foreground font-semibold text-sm flex items-center justify-center gap-2 cursor-not-allowed"
+          className="w-full min-h-[46px] rounded-xl bg-[#f5eddf] text-[#737373] font-semibold text-sm flex items-center justify-center gap-2 cursor-not-allowed"
         >
           {isOrdersDisabled ? "Orders Paused" : "Reach Minimum Order Amount"}
         </button>
       )}
 
-      <div className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground pt-1">
-        <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+      <div className="flex items-center justify-center gap-1.5 text-[11px] text-[#737373] pt-1">
+        <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
         <span>Safe ordering • Pay via UPI QR or Cash on Delivery</span>
       </div>
     </div>

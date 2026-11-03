@@ -1,190 +1,147 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { Phone, MapPin, Clock, ShieldCheck, Flame, ArrowRight } from "lucide-react";
+import { Sparkles, Phone, MapPin, Clock, ShieldCheck } from "lucide-react";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-slate-200 bg-white pt-12 pb-24 sm:pb-12 text-xs text-slate-600 mt-auto">
+    <footer className="bg-[#202d3a] text-[#fff9f0] pt-12 pb-24 sm:pb-12 text-xs mt-auto">
       <div className="container mx-auto max-w-6xl px-4 sm:px-6">
-        
-        {/* Main 4-column footer */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 pb-10">
-          
-          {/* Col 1: Shop details */}
+          {/* Brand Col */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-amber-500 text-white flex items-center justify-center font-black">
-                <Flame className="h-5 w-5 fill-white text-amber-200" />
-              </div>
+              <Sparkles className="h-6 w-6 text-[#e9b94f]" />
               <div>
-                <span className="font-extrabold text-slate-900 text-sm tracking-tight block">
-                  {siteConfig.name.en}
+                <span className="font-heading font-semibold text-lg tracking-[2px] text-[#fff9f0] block">
+                  VIGHNAHARTA
                 </span>
-                <span className="text-[10px] text-red-700 font-semibold block">
-                  {siteConfig.name.mr}
+                <span className="text-[9px] tracking-[3px] text-[#c6cdd2] font-semibold block uppercase">
+                  CRACKERS • {siteConfig.name.mr}
                 </span>
               </div>
             </div>
-
-            <p className="text-slate-500 text-xs leading-relaxed">
-              Wholesale Sivakasi firecrackers direct to families & festival organisers. Certified, safe, and factory-priced crackers for Diwali 2026.
+            <p className="text-[#c6cdd2] text-xs leading-relaxed">
+              A neighbourhood shop for brighter festive moments. Thoughtfully selected, locally delivered at wholesale rates.
             </p>
-
-            <div className="pt-1 text-[11px] text-slate-600 space-y-1">
+            <div className="pt-1 text-[11px] text-[#c6cdd2] space-y-1">
               <p>
-                <strong>Proprietor:</strong> {siteConfig.owner.en} ({siteConfig.owner.mr})
+                <strong className="text-white">Proprietor:</strong> {siteConfig.owner.en}
               </p>
-              <p className="flex items-center gap-1.5 text-slate-500">
-                <Clock className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+              <p className="flex items-center gap-1.5 text-[#c6cdd2]">
+                <Clock className="h-3.5 w-3.5 text-[#e9b94f] shrink-0" />
                 <span>Stall Open Daily: 8:00 AM – 10:00 PM</span>
               </p>
             </div>
           </div>
 
-          {/* Col 2: Navigation Links */}
+          {/* Quick Links */}
           <div className="space-y-2.5">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-1.5">
-              Quick Links
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider pb-1.5 border-b border-white/10">
+              Explore Collection
             </h3>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2 text-xs text-[#c6cdd2]">
               <li>
-                <Link href="/" className="hover:text-red-700 transition-colors flex items-center gap-1.5">
-                  <ArrowRight className="h-3 w-3 text-amber-500" />
-                  <span>Home Page</span>
+                <Link href="/" className="hover:text-white transition-colors">
+                  Home
                 </Link>
               </li>
               <li>
-                <Link href="/shop" className="hover:text-red-700 transition-colors flex items-center gap-1.5">
-                  <ArrowRight className="h-3 w-3 text-amber-500" />
-                  <span>Buy Crackers (Full Catalog)</span>
+                <Link href="/shop" className="hover:text-white transition-colors">
+                  All Crackers
                 </Link>
               </li>
               <li>
-                <Link href="/price-list" className="hover:text-red-700 transition-colors flex items-center gap-1.5">
-                  <ArrowRight className="h-3 w-3 text-amber-500" />
-                  <span>Quick Shop / Price List</span>
+                <Link href="/price-list" className="hover:text-white transition-colors">
+                  Price List (Quick Order)
                 </Link>
               </li>
               <li>
-                <Link href="/cart" className="hover:text-red-700 transition-colors flex items-center gap-1.5">
-                  <ArrowRight className="h-3 w-3 text-amber-500" />
-                  <span>Shopping Cart</span>
+                <Link href="/cart" className="hover:text-white transition-colors">
+                  Shopping Cart
                 </Link>
               </li>
               <li>
-                <Link href="/track" className="hover:text-red-700 transition-colors flex items-center gap-1.5">
-                  <ArrowRight className="h-3 w-3 text-amber-500" />
-                  <span>Track Your Order</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-red-700 transition-colors flex items-center gap-1.5">
-                  <ArrowRight className="h-3 w-3 text-amber-500" />
-                  <span>Stall Location & Contact</span>
+                <Link href="/track" className="hover:text-white transition-colors">
+                  Track Order
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Popular Categories */}
+          {/* Categories */}
           <div className="space-y-2.5">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-1.5">
-              Categories
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider pb-1.5 border-b border-white/10">
+              Popular Categories
             </h3>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-2 text-xs text-[#c6cdd2]">
               <li>
-                <Link href="/shop?category=sparklers" className="hover:text-red-700 transition-colors">
+                <Link href="/shop?category=sparklers" className="hover:text-white transition-colors">
                   Sparklers (फुलबाजे)
                 </Link>
               </li>
               <li>
-                <Link href="/shop?category=flower-pots" className="hover:text-red-700 transition-colors">
+                <Link href="/shop?category=flower-pots" className="hover:text-white transition-colors">
                   Flower Pots (अनार)
                 </Link>
               </li>
               <li>
-                <Link href="/shop?category=ground-chakkars" className="hover:text-red-700 transition-colors">
+                <Link href="/shop?category=ground-chakkars" className="hover:text-white transition-colors">
                   Ground Chakkars (भुईचक्र)
                 </Link>
               </li>
               <li>
-                <Link href="/shop?category=rockets" className="hover:text-red-700 transition-colors">
-                  Rockets & Parachutes (रॉकेट)
+                <Link href="/shop?category=sky-shots" className="hover:text-white transition-colors">
+                  Aerial Fireworks (स्काय शॉट्स)
                 </Link>
               </li>
               <li>
-                <Link href="/shop?category=sound-crackers" className="hover:text-red-700 transition-colors">
-                  Sound Crackers & Lad (आवाज फटाके)
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop?category=sky-shots" className="hover:text-red-700 transition-colors">
-                  Aerial Sky Shots (स्काय शॉट्स)
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop?category=gift-boxes" className="hover:text-red-700 transition-colors">
-                  Family Gift Boxes (गिफ्ट बॉक्स)
+                <Link href="/shop?category=gift-boxes" className="hover:text-white transition-colors">
+                  Festive Boxes (गिफ्ट बॉक्स)
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Stall Location & Contact */}
+          {/* Stall Details & Payment */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-1.5">
-              Stall Address & Support
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider pb-1.5 border-b border-white/10">
+              Stall & Payment
             </h3>
-            <div className="flex items-start gap-2 text-slate-700">
-              <MapPin className="h-4 w-4 text-red-700 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-[#c6cdd2]">
+              <MapPin className="h-4 w-4 text-[#e9b94f] shrink-0 mt-0.5" />
               <div>
-                <span className="block font-semibold text-slate-900">{siteConfig.address.en}</span>
-                <span className="text-[11px] text-slate-500">{siteConfig.address.mr}</span>
+                <span className="block font-semibold text-white">{siteConfig.address.en}</span>
+                <span className="text-[11px] text-[#c6cdd2]">{siteConfig.address.mr}</span>
               </div>
             </div>
-
             <div className="flex items-center gap-2">
-              <Phone className="h-4 w-4 text-emerald-700 shrink-0" />
+              <Phone className="h-4 w-4 text-[#e9b94f] shrink-0" />
               <a
                 href={`tel:${siteConfig.phone}`}
-                className="font-bold text-slate-900 hover:text-red-700 font-mono text-sm"
+                className="font-bold text-white hover:text-[#e9b94f] font-mono text-sm"
               >
                 +91 {siteConfig.phone}
               </a>
             </div>
-
-            <div className="pt-2">
-              <a
-                href={`https://wa.me/91${siteConfig.phone}?text=${encodeURIComponent("Hello Akshay, I want to inquire about Diwali firecrackers at Vighnaharta Stall.")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full rounded-lg bg-emerald-600 text-white font-semibold text-xs px-3 py-2 hover:bg-emerald-700 transition-colors shadow-xs"
-              >
-                <span>WhatsApp Enquiry</span>
-              </a>
-            </div>
-
-            <div className="flex items-center gap-1.5 text-[10px] text-slate-500 pt-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-              <span>UPI (GPay/PhonePe) & Cash Accepted</span>
+            <div className="flex items-center gap-1.5 text-[11px] text-[#c6cdd2] pt-1">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+              <span>UPI (Google Pay/PhonePe) & COD Accepted</span>
             </div>
           </div>
-
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 text-center sm:text-left">
+        {/* Bottom Rule & Legal */}
+        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#c6cdd2] text-center sm:text-left">
           <p>
             © {new Date().getFullYear()} {siteConfig.name.en} ({siteConfig.name.mr}). All rights reserved.
           </p>
-          <div className="flex items-center gap-4 text-slate-500">
-            <span>Stall Managed by Akshay Bendbhar</span>
-            <Link href="/admin/login" className="hover:text-slate-800 transition-colors">
+          <div className="flex items-center gap-4 text-[#c6cdd2]">
+            <span>Proprietor: Akshay Bendbhar</span>
+            <Link href="/admin/login" className="hover:text-white transition-colors">
               Owner Portal
             </Link>
           </div>
         </div>
-
       </div>
     </footer>
   );

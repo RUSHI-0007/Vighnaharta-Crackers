@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { useCartStore } from "@/store/cart-store";
 import { computeCartTotals } from "@/lib/pricing";
 import { useMounted } from "@/hooks/use-mounted";
@@ -13,10 +14,30 @@ import { LocationButton } from "@/components/checkout/location-button";
 import { PaymentMethodSelect } from "@/components/checkout/payment-method-select";
 import { PaymentPanel } from "@/components/checkout/payment-panel";
 import { CodNotice } from "@/components/checkout/cod-notice";
+import { CheckoutSteps } from "@/components/checkout/checkout-steps";
 import { formatCurrency } from "@/lib/format";
+import { siteConfig } from "@/config/site";
 import { toast } from "sonner";
-import { Loader2, ArrowRight, ShieldCheck, User, CreditCard } from "lucide-react";
+import {
+  Loader2,
+  ArrowRight,
+  ArrowLeft,
+  ShieldCheck,
+  User,
+  CreditCard,
+  AlertCircle,
+} from "lucide-react";
 import type { PaymentMethod, Settings } from "@/types";
+
+interface FormValues {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  landmark?: string;
+  notes?: string;
+  honeypot?: string;
+}
 
 export function CheckoutForm({ settings }: { settings: Settings }) {
   const router = useRouter();
@@ -25,13 +46,7 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
   const clearCart = useCartStore((s) => s.clearCart);
   const { total } = useMemo(() => computeCartTotals(items), [items]);
 
-  // Form State
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [landmark, setLandmark] = useState("");
-  const [notes, setNotes] = useState("");
+  const [step, setStep] = useState<2 | 3>(2);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(
     settings.upi_enabled ? "upi_qr" : "cod"
@@ -39,55 +54,81 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
   const [screenshot, setScreenshot] = useState<File | null>(null);
   const [screenshotError, setScreenshotError] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
-  const [honeypot, setHoneypot] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      name: "",
+      phone: "",
+      email: "",
+      address: "",
+      landmark: "",
+      notes: "",
+      honeypot: "",
+    },
+  });
 
   if (!mounted) return null;
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-16 rounded-2xl border border-slate-200 p-8 bg-white space-y-4 shadow-2xs">
-        <h3 className="text-lg font-bold text-slate-900">
-          Your Cart is Empty
-        </h3>
-        <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
-          Please select fireworks from the catalog before proceeding to checkout.
+      <div className="text-center py-16 rounded-2xl border border-[#e9e0d5] p-8 bg-white space-y-4 shadow-2xs">
+        <h3 className="text-lg font-serif font-bold text-[#202d3a]">Your Bag is Empty</h3>
+        <p className="text-xs sm:text-sm text-[#737373] max-w-sm mx-auto">
+          Please select fireworks from our festive collection before checking out.
         </p>
-        <Button onClick={() => router.push("/shop")} className="bg-red-700 text-white font-bold rounded-lg px-5 py-2 hover:bg-red-800">
+        <Button
+          onClick={() => router.push("/shop")}
+          className="bg-[#b91c32] text-white font-bold rounded-xl px-5 py-2 hover:bg-[#981426]"
+        >
           Browse Catalog &rarr;
         </Button>
       </div>
     );
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  if (!settings.accepting_orders) {
+    return (
+      <div className="text-center py-16 rounded-2xl border border-[#e9e0d5] p-8 bg-white space-y-4 shadow-2xs">
+        <AlertCircle className="h-10 w-10 text-[#b91c32] mx-auto" />
+        <h3 className="text-lg font-serif font-bold text-[#202d3a]">Orders Paused</h3>
+        <p className="text-xs sm:text-sm text-[#737373] max-w-sm mx-auto">
+          We are temporarily not taking new orders. Please contact our stall directly.
+        </p>
+      </div>
+    );
+  }
 
-    if (honeypot) {
+  const handleProceedToUpi = async () => {
+    const valid = await trigger(["name", "phone", "email", "address"]);
+    if (valid) {
+      if (total < settings.min_order_amount) {
+        toast.error(`Minimum order amount is ${formatCurrency(settings.min_order_amount)}`);
+        return;
+      }
+      setStep(3);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const onSubmit = async (values: FormValues) => {
+    if (values.honeypot) {
       toast.error("Invalid submission");
       return;
     }
 
-    // Validation
-    if (!name.trim() || name.trim().length < 2) {
-      toast.error("Please enter your full name.");
-      return;
-    }
-    if (!/^[6-9]\d{9}$/.test(phone.trim())) {
-      toast.error("Please enter a valid 10-digit Indian mobile number (e.g. 9876543210).");
-      return;
-    }
-    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      toast.error("Please enter a valid email address to receive your order receipt.");
-      return;
-    }
-    if (!address.trim() || address.trim().length < 5) {
-      toast.error("Please enter your detailed delivery address.");
+    if (total < settings.min_order_amount) {
+      toast.error(`Minimum order amount is ${formatCurrency(settings.min_order_amount)}`);
       return;
     }
 
     if (paymentMethod === "upi_qr" && !screenshot) {
       setScreenshotError("Please upload your UPI payment screenshot to complete the order.");
-      toast.error("UPI payment screenshot is required!");
+      toast.error("Payment screenshot is required for UPI orders!");
       return;
     }
 
@@ -96,12 +137,12 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
 
     try {
       const formData = new FormData();
-      formData.append("name", name.trim());
-      formData.append("phone", phone.trim());
-      formData.append("email", email.trim());
-      formData.append("address", address.trim());
-      if (landmark.trim()) formData.append("landmark", landmark.trim());
-      if (notes.trim()) formData.append("notes", notes.trim());
+      formData.append("name", values.name.trim());
+      formData.append("phone", values.phone.trim());
+      formData.append("email", values.email.trim());
+      formData.append("address", values.address.trim());
+      if (values.landmark?.trim()) formData.append("landmark", values.landmark.trim());
+      if (values.notes?.trim()) formData.append("notes", values.notes.trim());
       if (coords) {
         formData.append("lat", String(coords.lat));
         formData.append("lng", String(coords.lng));
@@ -123,17 +164,16 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
       });
 
       const result = await res.json();
-
       if (!res.ok || !result.ok) {
-        throw new Error(result.error || "Could not place order. Please try again or call us.");
+        throw new Error(result.error || "Could not place order. Please try again.");
       }
 
       clearCart();
-      toast.success("Order placed successfully! Receipt sent to your email.");
+      toast.success("Order placed successfully! Confirmation sent to your email.");
       router.push(
         `/order-success?code=${result.data.orderCode}&email=${encodeURIComponent(
-          email.trim()
-        )}`
+          values.email.trim()
+        )}&method=${paymentMethod}&name=${encodeURIComponent(values.name.trim())}`
       );
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "A technical error occurred.");
@@ -143,182 +183,268 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Honeypot field (hidden from real users) */}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Dynamic Step Progress Indicator */}
+      <div className="pb-1">
+        <CheckoutSteps currentStep={step} paymentMethod={paymentMethod} />
+      </div>
+
+      {/* Honeypot anti-bot */}
       <input
         type="text"
-        name="hp"
-        value={honeypot}
-        onChange={(e) => setHoneypot(e.target.value)}
+        {...register("honeypot")}
         tabIndex={-1}
         autoComplete="off"
         className="hidden"
         aria-hidden="true"
       />
 
-      {/* Customer Delivery Details */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-2xs space-y-4">
-        <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-700">
-            <User className="h-4 w-4" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-900">
-              1. Delivery Details
-            </h3>
-            <p className="text-xs text-slate-500">
-              Where should we deliver your firecrackers in Ganegaon or nearby?
-            </p>
-          </div>
-        </div>
+      {step === 2 && (
+        <>
+          {/* Customer Delivery Details */}
+          <div className="rounded-2xl border border-[#e9e0d5] bg-white p-5 sm:p-7 shadow-2xs space-y-5">
+            <div className="flex items-center gap-2.5 border-b border-[#e9e0d5] pb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#b91c32]/10 text-[#b91c32]">
+                <User className="h-4 w-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-[#202d3a]">1. Delivery Details</h3>
+                <p className="text-xs text-[#737373]">
+                  Where should we deliver your crackers in Ganegaon Khalsa or nearby?
+                </p>
+              </div>
+            </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="customer_name" className="text-xs font-semibold text-slate-700">Full Name *</Label>
-            <Input
-              id="customer_name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Rahul Shinde"
-              className="bg-slate-50 border-slate-200 h-10 rounded-lg text-xs sm:text-sm text-slate-900 focus:bg-white"
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="name" className="text-xs font-semibold text-[#202d3a]">
+                  Full Name *
+                </Label>
+                <Input
+                  id="name"
+                  {...register("name", {
+                    required: "Please enter your full name",
+                    minLength: { value: 2, message: "Name must be at least 2 characters" },
+                  })}
+                  placeholder="e.g. Rahul Shinde"
+                  className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
+                />
+                {errors.name && (
+                  <p className="text-xs text-[#b91c32]">{errors.name.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="phone" className="text-xs font-semibold text-[#202d3a]">
+                  Phone Number (10 Digits) *
+                </Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  maxLength={10}
+                  {...register("phone", {
+                    required: "Please enter your phone number",
+                    pattern: {
+                      value: /^[6-9]\d{9}$/,
+                      message: "Enter a valid 10-digit mobile number",
+                    },
+                  })}
+                  placeholder="e.g. 9876543210"
+                  className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-sm font-mono text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
+                />
+                {errors.phone && (
+                  <p className="text-xs text-[#b91c32]">{errors.phone.message}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-xs font-semibold text-[#202d3a]">
+                Email Address (for Itemized Order Receipt) *
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                {...register("email", {
+                  required: "Email is required for your order confirmation receipt",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Please enter a valid email address",
+                  },
+                })}
+                placeholder="e.g. rahul@gmail.com"
+                className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
+              />
+              {errors.email && (
+                <p className="text-xs text-[#b91c32]">{errors.email.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="address" className="text-xs font-semibold text-[#202d3a]">
+                  Delivery Address *
+                </Label>
+                <LocationButton
+                  onLocationFound={setCoords}
+                  hasLocation={coords !== null}
+                />
+              </div>
+              <Textarea
+                id="address"
+                rows={2}
+                {...register("address", {
+                  required: "Detailed delivery address is required",
+                  minLength: { value: 5, message: "Address must be at least 5 characters" },
+                })}
+                placeholder="House/flat number, road, area, village..."
+                className="bg-[#fff9f0]/60 border-[#e9e0d5] rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32] min-h-[70px]"
+              />
+              {errors.address && (
+                <p className="text-xs text-[#b91c32]">{errors.address.message}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="landmark" className="text-xs font-semibold text-[#202d3a]">
+                  Nearby Landmark (Optional)
+                </Label>
+                <Input
+                  id="landmark"
+                  {...register("landmark")}
+                  placeholder="e.g. Near Grampanchayat / Temple"
+                  className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="notes" className="text-xs font-semibold text-[#202d3a]">
+                  Special Delivery Notes (Optional)
+                </Label>
+                <Input
+                  id="notes"
+                  {...register("notes")}
+                  placeholder="e.g. Deliver before 6 PM"
+                  className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Method Selection */}
+          <div className="rounded-2xl border border-[#e9e0d5] bg-white p-5 sm:p-7 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2.5 border-b border-[#e9e0d5] pb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#b91c32]/10 text-[#b91c32]">
+                <CreditCard className="h-4 w-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-[#202d3a]">2. Payment Method</h3>
+                <p className="text-xs text-[#737373]">
+                  Select Instant UPI QR Code or Cash on Delivery / Stall Pickup
+                </p>
+              </div>
+            </div>
+
+            <PaymentMethodSelect
+              settings={settings}
+              value={paymentMethod}
+              onChange={setPaymentMethod}
             />
           </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="phone" className="text-xs font-semibold text-slate-700">Phone Number (10 Digits) *</Label>
-            <Input
-              id="phone"
-              type="tel"
-              required
-              maxLength={10}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-              placeholder="e.g. 9876543210"
-              className="bg-slate-50 border-slate-200 h-10 rounded-lg text-xs sm:text-sm font-mono text-slate-900 focus:bg-white"
-            />
+          {/* COD Notice if COD selected */}
+          {paymentMethod === "cod" && (
+            <CodNotice totalFormatted={formatCurrency(total)} />
+          )}
+
+          {/* Next Button / Place Order Button */}
+          <div className="space-y-3 pt-2">
+            {paymentMethod === "upi_qr" ? (
+              <button
+                type="button"
+                onClick={handleProceedToUpi}
+                className="w-full min-h-[48px] rounded-xl bg-[#b91c32] text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#981426] active:scale-98 transition-all cursor-pointer shadow-xs"
+              >
+                <span>Continue to UPI Payment ({formatCurrency(total)})</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full min-h-[48px] rounded-xl bg-[#b91c32] text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#981426] active:scale-98 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Placing Cash on Delivery Order...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Place Cash on Delivery Order ({formatCurrency(total)})</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
+              </button>
+            )}
+
+            <div className="flex items-center justify-center gap-1.5 text-xs text-[#737373] text-center">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+              <span>
+                Order dispatched directly by {siteConfig.owner.en} at {siteConfig.name.en} stall
+              </span>
+            </div>
           </div>
-        </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-xs font-semibold text-slate-700">
-            Email Address (for Order Receipt & Confirmation) *
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="e.g. rahul@gmail.com"
-            className="bg-slate-50 border-slate-200 h-10 rounded-lg text-xs sm:text-sm text-slate-900 focus:bg-white"
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="address" className="text-xs font-semibold text-slate-700">Delivery Address *</Label>
-            <LocationButton
-              onLocationFound={setCoords}
-              hasLocation={coords !== null}
-            />
-          </div>
-          <Textarea
-            id="address"
-            required
-            rows={2}
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="House/flat number, road, area, village..."
-            className="bg-slate-50 border-slate-200 rounded-lg text-xs sm:text-sm text-slate-900 focus:bg-white"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="landmark" className="text-xs font-semibold text-slate-700">Nearby Landmark (Optional)</Label>
-            <Input
-              id="landmark"
-              value={landmark}
-              onChange={(e) => setLandmark(e.target.value)}
-              placeholder="e.g. Near Grampanchayat / Temple"
-              className="bg-slate-50 border-slate-200 h-10 rounded-lg text-xs sm:text-sm text-slate-900 focus:bg-white"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="notes" className="text-xs font-semibold text-slate-700">Special Notes (Optional)</Label>
-            <Input
-              id="notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Please deliver by evening"
-              className="bg-slate-50 border-slate-200 h-10 rounded-lg text-xs sm:text-sm text-slate-900 focus:bg-white"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Payment Method Selection */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-2xs space-y-4">
-        <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-            <CreditCard className="h-4 w-4" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-900">
-              2. Payment Method
-            </h3>
-            <p className="text-xs text-slate-500">
-              Select Instant UPI QR Code or Cash on Delivery / Stall Pickup
-            </p>
-          </div>
-        </div>
-
-        <PaymentMethodSelect
-          settings={settings}
-          value={paymentMethod}
-          onChange={setPaymentMethod}
-        />
-      </div>
-
-      {/* Payment Panel or COD Notice */}
-      {paymentMethod === "upi_qr" ? (
-        <PaymentPanel
-          settings={settings}
-          total={total}
-          onScreenshotSelect={setScreenshot}
-          screenshotError={screenshotError}
-        />
-      ) : (
-        <CodNotice totalFormatted={formatCurrency(total)} />
+        </>
       )}
 
-      {/* Submit Button */}
-      <div className="space-y-3 pt-2">
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full min-h-[48px] rounded-xl bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center gap-2 hover:bg-emerald-700 active:scale-98 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Placing Order...</span>
-            </>
-          ) : (
-            <>
-              <span>Place Order ({formatCurrency(total)})</span>
-              <ArrowRight className="h-4 w-4" />
-            </>
-          )}
-        </button>
+      {step === 3 && paymentMethod === "upi_qr" && (
+        <div className="space-y-6">
+          <button
+            type="button"
+            onClick={() => setStep(2)}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#b91c32] hover:underline cursor-pointer"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Back to Delivery Details</span>
+          </button>
 
-        <div className="flex items-center justify-center gap-1.5 text-xs text-slate-500 text-center">
-          <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-          <span>Order received directly by Akshay Bendbhar at Vighnaharta Stall</span>
+          <PaymentPanel
+            settings={settings}
+            total={total}
+            onScreenshotSelect={setScreenshot}
+            screenshotError={screenshotError}
+          />
+
+          <div className="space-y-3 pt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full min-h-[48px] rounded-xl bg-[#b91c32] text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#981426] active:scale-98 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Submitting Order & Proof...</span>
+                </>
+              ) : (
+                <>
+                  <span>Submit Order with Payment Proof ({formatCurrency(total)})</span>
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
+            </button>
+
+            <div className="flex items-center justify-center gap-1.5 text-xs text-[#737373] text-center">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+              <span>
+                Screenshot verified directly by {siteConfig.owner.en}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </form>
   );
 }

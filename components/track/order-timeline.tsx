@@ -22,7 +22,7 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
             <strong>Reason:</strong> {adminNote}
           </p>
         ) : (
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#737373]">
             This order was cancelled due to an issue with payment verification or stock availability.
           </p>
         )}
@@ -50,10 +50,10 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
     <div className="py-2">
       <div className="relative flex justify-between items-center">
         {/* Progress background line */}
-        <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-200 -z-0" />
+        <div className="absolute top-4 left-4 right-4 h-0.5 bg-[#e9e0d5] -z-0" />
         {/* Active progress bar */}
         <div
-          className="absolute top-4 left-4 h-0.5 bg-emerald-600 transition-all duration-300 -z-0"
+          className="absolute top-4 left-4 h-0.5 bg-[#b91c32] transition-all duration-300 -z-0"
           style={{ width: `${(currentIndex / (steps.length - 1)) * 100}%` }}
         />
 
@@ -68,10 +68,10 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
                 className={cn(
                   "h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold transition-all",
                   isCompleted
-                    ? "bg-emerald-600 text-white"
+                    ? "bg-[#b91c32] text-white"
                     : isCurrent
-                    ? "bg-amber-500 text-white ring-2 ring-amber-300"
-                    : "bg-slate-200 text-slate-400"
+                    ? "bg-[#e9b94f] text-[#202d3a] ring-2 ring-[#e9b94f]/40"
+                    : "bg-[#f5eddf] text-[#737373]"
                 )}
               >
                 <Icon className="h-3.5 w-3.5" />
@@ -79,7 +79,11 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
               <span
                 className={cn(
                   "mt-1.5 text-center text-[11px] font-medium leading-tight",
-                  isCurrent ? "text-amber-800 font-bold" : isCompleted ? "text-emerald-700 font-bold" : "text-slate-400"
+                  isCurrent
+                    ? "text-[#b91c32] font-bold"
+                    : isCompleted
+                    ? "text-[#202d3a] font-bold"
+                    : "text-[#737373]"
                 )}
               >
                 {step.titleEn}

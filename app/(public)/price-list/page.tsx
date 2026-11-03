@@ -22,11 +22,11 @@ async function PriceListContent() {
 
 export default function PriceListPage() {
   return (
-    <div className="bg-[#f8fafc] min-h-[calc(100vh-160px)] py-6 sm:py-8">
+    <div className="bg-[#fff9f0] min-h-[calc(100vh-160px)] py-8 sm:py-12">
       <div className="container mx-auto max-w-6xl px-4 sm:px-6">
         <Suspense
           fallback={
-            <div className="py-20 text-center text-slate-500 text-sm">
+            <div className="py-20 text-center text-[#737373] text-sm">
               Loading wholesale price list...
             </div>
           }
@@ -37,4 +37,3 @@ export default function PriceListPage() {
     </div>
   );
 }
-

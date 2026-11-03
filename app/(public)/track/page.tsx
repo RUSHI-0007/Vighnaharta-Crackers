@@ -23,18 +23,27 @@ async function TrackContent({ searchParams }: TrackPageProps) {
 
 export default function TrackPage({ searchParams }: TrackPageProps) {
   return (
-    <div className="bg-[#f8fafc] min-h-[calc(100vh-160px)] py-8 sm:py-12">
+    <div className="bg-[#fff9f0] min-h-[calc(100vh-160px)] py-8 sm:py-12">
       <div className="container mx-auto max-w-2xl px-4 sm:px-6 text-center">
-        <div className="mb-6 space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+        <div className="mb-8 space-y-1">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#b91c32] block">
+            Order Status
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#202d3a] tracking-tight">
             Track Your Order
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+          <p className="text-xs sm:text-sm text-[#737373] max-w-md mx-auto">
             Enter your order tracking code and registered phone number to view live status.
           </p>
         </div>
 
-        <Suspense fallback={<div className="py-12 text-slate-400 text-xs">Loading order details...</div>}>
+        <Suspense
+          fallback={
+            <div className="py-12 text-[#737373] text-xs">
+              Loading order details...
+            </div>
+          }
+        >
           <TrackContent searchParams={searchParams} />
         </Suspense>
       </div>

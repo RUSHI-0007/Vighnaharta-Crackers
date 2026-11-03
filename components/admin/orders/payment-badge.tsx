@@ -11,11 +11,11 @@ export function PaymentBadge({
   const isFailed = status === "failed";
   const methodLabel = method === "cod" ? "COD" : "UPI";
 
-  let statusColor = "bg-amber-500/20 text-amber-300 border-amber-500/40";
+  let statusColor = "bg-amber-100 text-amber-900 border-amber-300";
   if (isPaid) {
-    statusColor = "bg-emerald-500/20 text-emerald-300 border-emerald-500/40";
+    statusColor = "bg-emerald-100 text-emerald-900 border-emerald-300";
   } else if (isFailed) {
-    statusColor = "bg-destructive/20 text-destructive border-destructive/40";
+    statusColor = "bg-rose-100 text-rose-900 border-rose-300";
   }
 
   return (

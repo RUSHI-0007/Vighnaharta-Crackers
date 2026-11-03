@@ -46,23 +46,27 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
   return (
     <div className="space-y-6">
       {/* Search Card */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 text-left shadow-2xs">
+      <div className="rounded-2xl border border-[#e9e0d5] bg-white p-5 sm:p-7 text-left shadow-2xs">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="orderCode" className="text-xs font-semibold text-slate-700">Order Tracking Code *</Label>
+              <Label htmlFor="orderCode" className="text-xs font-semibold text-[#202d3a]">
+                Order Tracking Code *
+              </Label>
               <Input
                 id="orderCode"
                 required
                 value={orderCode}
                 onChange={(e) => setOrderCode(e.target.value)}
                 placeholder="e.g. VFS-261103-XXXX"
-                className="font-mono uppercase bg-slate-50 border-slate-200 h-10 rounded-lg text-xs sm:text-sm text-slate-900 focus:bg-white"
+                className="font-mono uppercase bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-xs sm:text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="phone" className="text-xs font-semibold text-slate-700">Registered Phone Number *</Label>
+              <Label htmlFor="phone" className="text-xs font-semibold text-[#202d3a]">
+                Registered Phone Number *
+              </Label>
               <Input
                 id="phone"
                 required
@@ -71,7 +75,7 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                 placeholder="10-digit mobile number"
-                className="bg-slate-50 border-slate-200 h-10 rounded-lg text-xs sm:text-sm font-mono text-slate-900 focus:bg-white"
+                className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-xs sm:text-sm font-mono text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
               />
             </div>
           </div>
@@ -79,7 +83,7 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full min-h-[44px] rounded-xl bg-red-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-red-800 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+            className="w-full min-h-[46px] rounded-xl bg-[#b91c32] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-[#981426] transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
           >
             {isPending ? (
               <>
@@ -89,7 +93,7 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
             ) : (
               <>
                 <PackageSearch className="h-4 w-4" />
-                <span>Check Status</span>
+                <span>Check Live Status</span>
                 <ArrowRight className="h-4 w-4" />
               </>
             )}

@@ -1,18 +1,21 @@
 import { Banknote, PhoneCall } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
 export function CodNotice({ totalFormatted }: { totalFormatted: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 text-xs text-slate-600 space-y-2 shadow-2xs">
-      <div className="flex items-center gap-2 font-bold text-slate-900 text-sm">
-        <Banknote className="h-4 w-4 text-emerald-700" />
+    <div className="rounded-2xl border border-[#e9e0d5] bg-[#f5eddf]/50 p-5 text-xs text-[#202d3a] space-y-3">
+      <div className="flex items-center gap-2 font-bold text-[#202d3a] text-sm">
+        <Banknote className="h-4 w-4 text-[#b91c32]" />
         <span>Cash on Delivery Notice</span>
       </div>
-      <p className="leading-relaxed text-slate-600">
-        Please keep the exact cash amount of <strong className="text-slate-900 font-mono">{totalFormatted}</strong> ready for the delivery partner or when collecting your package at the stall.
+      <p className="leading-relaxed text-[#737373]">
+        Please keep the exact cash amount of <strong className="text-[#202d3a] font-mono font-bold">{totalFormatted}</strong> ready for the delivery partner or when collecting your package at the stall.
       </p>
-      <div className="flex items-center gap-2 text-slate-500 pt-1 border-t border-slate-100">
-        <PhoneCall className="h-3.5 w-3.5 text-red-700 shrink-0" />
-        <span>Akshay Bendbhar will call you on your mobile number to confirm before dispatch.</span>
+      <div className="flex items-center gap-2 text-[#737373] pt-2 border-t border-[#e9e0d5]">
+        <PhoneCall className="h-3.5 w-3.5 text-[#b91c32] shrink-0" />
+        <span>
+          {siteConfig.owner.en} will call your phone number to confirm your order details before dispatch.
+        </span>
       </div>
     </div>
   );

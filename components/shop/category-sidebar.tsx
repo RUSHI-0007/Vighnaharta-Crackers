@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Category } from "@/types";
+import { SlidersHorizontal, MapPin } from "lucide-react";
 
 interface CategorySidebarProps {
   categories: Category[];
@@ -19,40 +20,21 @@ export function CategorySidebar({
   const currentCategory = searchParams.get("category") || "all";
 
   return (
-    <aside className="w-full">
-      {/* Sidebar Header */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
-        <h3 className="text-xs font-black uppercase tracking-wider text-slate-800 pb-3 mb-2 border-b border-slate-100 flex items-center justify-between">
-          <span>Categories</span>
-          <span className="text-[10px] text-slate-400 font-normal">
-            {categories.length} Types
-          </span>
-        </h3>
-
-        {/* Categories List */}
-        <div className="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-x-visible pb-1 md:pb-0 scrollbar-none">
-          {/* All Categories Option */}
+    <aside className="w-full space-y-4">
+      {/* Mobile Horizontal Pill Scroll Strip */}
+      <div className="md:hidden bg-white rounded-[12px] border border-[#e9e0d5] p-2 shadow-2xs">
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5 px-0.5">
           <Link
             href="/shop"
-            className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors shrink-0 ${
+            className={`px-3 py-1.5 rounded-[8px] text-xs font-semibold transition-colors shrink-0 flex items-center gap-1.5 ${
               currentCategory === "all"
-                ? "bg-red-700 text-white font-bold shadow-2xs"
-                : "text-slate-700 hover:bg-slate-100"
+                ? "bg-[#fbecef] text-[#b91c32] font-bold"
+                : "text-[#202d3a] hover:bg-[#f5eddf]"
             }`}
           >
-            <span>All Categories</span>
-            <span
-              className={`text-[11px] font-mono ml-2 px-1.5 py-0.2 rounded-full ${
-                currentCategory === "all"
-                  ? "bg-white/20 text-white"
-                  : "bg-slate-100 text-slate-500"
-              }`}
-            >
-              {totalCount}
-            </span>
+            <span>All crackers ({totalCount})</span>
           </Link>
 
-          {/* Each Category */}
           {categories.map((cat) => {
             const count = counts[cat.id] ?? counts[cat.slug] ?? 0;
             const isActive = currentCategory === cat.slug;
@@ -61,37 +43,79 @@ export function CategorySidebar({
               <Link
                 key={cat.id}
                 href={`/shop?category=${cat.slug}`}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-colors shrink-0 ${
+                className={`px-3 py-1.5 rounded-[8px] text-xs font-semibold transition-colors shrink-0 flex items-center gap-1.5 ${
                   isActive
-                    ? "bg-red-700 text-white font-bold shadow-2xs"
-                    : "text-slate-700 hover:bg-slate-100"
+                    ? "bg-[#fbecef] text-[#b91c32] font-bold"
+                    : "text-[#202d3a] hover:bg-[#f5eddf]"
                 }`}
               >
-                <div className="flex flex-col">
-                  <span>{cat.name_en}</span>
-                  <span
-                    className={`text-[10px] ${
-                      isActive ? "text-red-100" : "text-slate-400"
-                    }`}
-                  >
-                    {cat.name_mr}
-                  </span>
-                </div>
-                <span
-                  className={`text-[11px] font-mono ml-2 px-1.5 py-0.2 rounded-full ${
-                    isActive
-                      ? "bg-white/20 text-white"
-                      : "bg-slate-100 text-slate-500"
-                  }`}
-                >
-                  {count}
-                </span>
+                <span>{cat.name_en} ({count})</span>
               </Link>
             );
           })}
         </div>
       </div>
+
+      {/* Desktop Vertical Sidebar Card */}
+      <div className="hidden md:block bg-white rounded-[16px] border border-[#e9e0d5] p-5 shadow-[0px_6px_24px_0px_rgba(32,45,58,0.03)] space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-[#e9e0d5]">
+          <h3 className="font-heading font-medium text-[20px] text-[#202d3a]">
+            Refine your choice
+          </h3>
+          <SlidersHorizontal className="h-4 w-4 text-[#737373]" />
+        </div>
+
+        <div className="space-y-1">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#737373] px-3 pb-1">
+            Categories
+          </p>
+
+          <Link
+            href="/shop"
+            className={`flex items-center justify-between px-3 py-2 rounded-[8px] text-[13px] transition-colors ${
+              currentCategory === "all"
+                ? "bg-[#fbecef] text-[#b91c32] font-semibold"
+                : "text-[#202d3a] hover:bg-[#f5eddf]"
+            }`}
+          >
+            <span>All crackers</span>
+            <span className="text-[11px] font-mono text-[#737373]">({totalCount})</span>
+          </Link>
+
+          {categories.map((cat) => {
+            const count = counts[cat.id] ?? counts[cat.slug] ?? 0;
+            const isActive = currentCategory === cat.slug;
+
+            return (
+              <Link
+                key={cat.id}
+                href={`/shop?category=${cat.slug}`}
+                className={`flex items-center justify-between px-3 py-2 rounded-[8px] text-[13px] transition-colors ${
+                  isActive
+                    ? "bg-[#fbecef] text-[#b91c32] font-semibold"
+                    : "text-[#202d3a] hover:bg-[#f5eddf]"
+                }`}
+              >
+                <span>{cat.name_en}</span>
+                <span className="text-[11px] font-mono text-[#737373]">({count})</span>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Local Delivery Help Card */}
+        <div className="pt-3 border-t border-[#e9e0d5]">
+          <div className="bg-[#f5eddf] rounded-[12px] p-4 space-y-1">
+            <div className="flex items-center gap-2 text-[#202d3a]">
+              <MapPin className="h-4 w-4 text-[#b91c32]" />
+              <span className="font-semibold text-[13px]">Ganegaon Khalsa Stall</span>
+            </div>
+            <p className="text-[11px] text-[#737373] leading-relaxed">
+              Direct stall pickup and local delivery options in Ganegaon Khalsa.
+            </p>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 }
-

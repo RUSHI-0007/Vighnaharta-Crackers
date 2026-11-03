@@ -35,22 +35,22 @@ export function ProductSearch() {
 
   return (
     <form onSubmit={handleSearch} className="relative w-full">
-      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#737373]" />
       <Input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search fireworks by name..."
-        className="pl-9 pr-9 bg-card border-border h-10 rounded-lg text-xs sm:text-sm text-white placeholder:text-slate-500"
+        placeholder="Search crackers by name..."
+        className="pl-9 pr-9 bg-white border-[#e9e0d5] h-10 rounded-[10px] text-xs sm:text-[13px] text-[#202d3a] placeholder:text-[#737373]"
       />
       {isPending && (
-        <Loader2 className="absolute right-9 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-primary" />
+        <Loader2 className="absolute right-9 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-[#b91c32]" />
       )}
       {query && (
         <button
           type="button"
           onClick={handleClear}
           aria-label="Clear search"
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1 cursor-pointer"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#202d3a] p-1 cursor-pointer"
         >
           <X className="h-3.5 w-3.5" />
         </button>

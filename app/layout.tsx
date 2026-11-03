@@ -1,8 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Yatra_One, Mukta } from "next/font/google";
+import { Yatra_One, Mukta, Outfit, Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 const yatraOne = Yatra_One({
   weight: "400",
@@ -33,7 +45,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f59e0b",
+  themeColor: "#b91c32",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -45,13 +57,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${yatraOne.variable} ${mukta.variable}`}>
-      <body className="antialiased min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col font-body selection:bg-red-600 selection:text-white">
+    <html
+      lang="en"
+      className={`${outfit.variable} ${inter.variable} ${yatraOne.variable} ${mukta.variable}`}
+    >
+      <body className="antialiased min-h-screen bg-background text-foreground flex flex-col font-body selection:bg-primary selection:text-primary-foreground">
         {children}
-        <Toaster
-          position="top-center"
-          richColors
-        />
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

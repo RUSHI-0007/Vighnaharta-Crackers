@@ -1,28 +1,24 @@
 "use client";
 
-import { useMemo } from "react";
+import Image from "next/image";
 import type { Product } from "@/types";
 import { useCartStore } from "@/store/cart-store";
 import { formatCurrency } from "@/lib/format";
 import { calculateEffectivePrice } from "@/lib/pricing";
 import { toast } from "sonner";
-import { ShoppingCart, Plus, Minus } from "lucide-react";
+import { ShoppingBag, Plus, Minus } from "lucide-react";
 
-export function ProductCard({
-  product,
-  categoryName,
-}: {
+interface ProductCardProps {
   product: Product;
   categoryName?: string;
-}) {
-  const items = useCartStore((state) => state.items);
-  const addItem = useCartStore((state) => state.addItem);
-  const setQty = useCartStore((state) => state.setQty);
+}
 
-  const cartItem = useMemo(
-    () => items.find((i) => i.productId === product.id),
-    [items, product.id]
+export function ProductCard({ product, categoryName }: ProductCardProps) {
+  const quantity = useCartStore(
+    (s) => s.items.find((i) => i.productId === product.id)?.quantity ?? 0
   );
+  const addItem = useCartStore((s) => s.addItem);
+  const setQty = useCartStore((s) => s.setQty);
 
   const effectivePrice = calculateEffectivePrice(product.price, product.discount_percent);
   const hasDiscount = product.discount_percent > 0;
@@ -36,136 +32,122 @@ export function ProductCard({
   };
 
   const handleIncrement = () => {
-    if (!cartItem) {
+    if (quantity === 0) {
       handleAdd();
     } else {
-      setQty(product.id, cartItem.quantity + 1);
+      setQty(product.id, quantity + 1);
     }
   };
 
   const handleDecrement = () => {
-    if (cartItem && cartItem.quantity > 0) {
-      setQty(product.id, cartItem.quantity - 1);
+    if (quantity > 0) {
+      setQty(product.id, quantity - 1);
     }
   };
 
   return (
-    <div className="relative bg-white rounded-xl border border-slate-200 p-3 sm:p-4 shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between group">
-      
-      {/* Top Discount / Hot Badge */}
-      <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1">
-        {hasDiscount && (
-          <span className="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-2xs">
-            {product.discount_percent}% OFF
-          </span>
-        )}
-      </div>
-
+    <div className="bg-white border border-[#e9e0d5] hover:border-[#b91c32] rounded-[16px] p-4 flex flex-col justify-between transition-all shadow-[0px_6px_24px_0px_rgba(32,45,58,0.03)] group">
       <div>
-        {/* Product Image Box */}
-        <div className="relative mb-3 flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg bg-slate-50 border border-slate-100 group-hover:bg-slate-100/70 transition-colors">
-          {product.image_path ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={product.image_path}
-              alt={product.name_en}
-              className="h-full w-full object-contain p-2"
-              loading="lazy"
-            />
-          ) : (
-            <div className="text-center p-3">
-              <span className="text-4xl block mb-1">🎇</span>
-              <span className="text-[10px] text-slate-400 font-medium">
-                {product.unit}
-              </span>
-            </div>
+        {/* Product Media */}
+        <div className="h-[180px] sm:h-[220px] w-full rounded-[10px] overflow-hidden relative bg-[#f5eddf] mb-3">
+          <Image
+            src={product.image_path || "/images/product-placeholder.webp"}
+            alt={product.name_en}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+          {hasDiscount && (
+            <span className="absolute top-2 left-2 bg-[#b91c32] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">
+              {product.discount_percent}% OFF
+            </span>
           )}
-
-          {/* Out of stock overlay */}
           {!product.in_stock && (
-            <div className="absolute inset-0 bg-white/80 backdrop-blur-2xs flex items-center justify-center">
-              <span className="text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
-                Out of Stock
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-xs flex items-center justify-center">
+              <span className="text-xs font-semibold text-[#b91c32] bg-[#fbecef] border border-[#b91c32]/20 px-2.5 py-1 rounded-md">
+                Sold Out
               </span>
             </div>
           )}
         </div>
 
-        {/* Product Meta */}
-        <div className="space-y-1 mb-2">
+        {/* Product Details */}
+        <div className="space-y-1 mb-3">
           {categoryName && (
-            <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider block">
+            <span className="text-[10px] font-bold tracking-[1.5px] uppercase text-[#b91c32] block">
               {categoryName}
             </span>
           )}
-          <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug line-clamp-1 group-hover:text-red-700 transition-colors">
+          <h3 className="font-heading font-medium text-[#202d3a] group-hover:text-[#b91c32] text-[16px] sm:text-[18px] transition-colors leading-snug line-clamp-1">
             {product.name_en}
           </h3>
-          <p className="text-[11px] text-slate-500 line-clamp-1">
-            {product.name_mr}
-          </p>
-          <p className="text-[10px] text-slate-400 font-medium">
-            Unit: {product.unit}
+          <p className="text-[12px] text-[#737373] line-clamp-1">
+            {product.name_mr} • {product.unit}
           </p>
         </div>
       </div>
 
-      {/* Pricing and Action Button */}
-      <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-        <div className="flex flex-col">
+      {/* Pricing & Cart Action */}
+      <div className="space-y-3 pt-2 border-t border-[#e9e0d5]">
+        <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-1.5">
-            <span className="text-sm sm:text-base font-extrabold text-emerald-700">
+            <span className="font-heading font-semibold text-[#202d3a] text-[18px] sm:text-[20px]">
               {formatCurrency(effectivePrice)}
             </span>
             {hasDiscount && (
-              <span className="text-[11px] text-slate-400 line-through">
+              <span className="text-[11px] text-[#737373] line-through">
                 {formatCurrency(product.price)}
               </span>
             )}
           </div>
+          <span
+            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+              product.in_stock
+                ? "bg-[#eaf3ed] text-[#25664d]"
+                : "bg-[#fbecef] text-[#b91c32]"
+            }`}
+          >
+            {product.in_stock ? "In stock" : "Sold out"}
+          </span>
         </div>
 
-        {/* Add Button or Quantity Stepper */}
         {product.in_stock ? (
-          cartItem && cartItem.quantity > 0 ? (
-            <div className="flex items-center rounded-lg border border-emerald-500 bg-emerald-50 overflow-hidden text-emerald-900 font-bold text-xs shadow-2xs">
+          quantity > 0 ? (
+            <div className="border border-[#e9e0d5] bg-[#fff9f0] rounded-[10px] h-[44px] flex items-center justify-between px-3 text-[#202d3a]">
               <button
                 type="button"
                 onClick={handleDecrement}
-                className="px-2 py-1.5 hover:bg-emerald-200/80 transition-colors"
+                className="p-1 hover:text-[#b91c32] transition-colors cursor-pointer text-base"
                 aria-label="Decrease quantity"
               >
-                <Minus className="h-3 w-3" />
+                <Minus className="h-4 w-4" />
               </button>
-              <span className="px-2 min-w-[20px] text-center font-mono">
-                {cartItem.quantity}
-              </span>
+              <span className="font-semibold text-sm">{quantity}</span>
               <button
                 type="button"
                 onClick={handleIncrement}
-                className="px-2 py-1.5 hover:bg-emerald-200/80 transition-colors"
+                className="p-1 hover:text-[#b91c32] transition-colors cursor-pointer text-base"
                 aria-label="Increase quantity"
               >
-                <Plus className="h-3 w-3" />
+                <Plus className="h-4 w-4" />
               </button>
             </div>
           ) : (
             <button
               type="button"
               onClick={handleAdd}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-300 font-bold text-xs px-3 py-1.5 transition-all shadow-2xs cursor-pointer"
+              className="w-full h-[44px] bg-[#b91c32] hover:bg-[#991b1b] text-white rounded-[10px] font-semibold text-[13px] flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-sm cursor-pointer"
             >
-              <ShoppingCart className="h-3 w-3" />
-              <span>Add</span>
+              <ShoppingBag className="h-4 w-4" />
+              <span>Add to cart</span>
             </button>
           )
         ) : (
-          <span className="text-[11px] text-slate-400 font-medium">
+          <div className="h-[44px] flex items-center justify-center bg-gray-100 rounded-[10px] text-xs text-[#737373] font-medium">
             Unavailable
-          </span>
+          </div>
         )}
       </div>
-
     </div>
   );
 }

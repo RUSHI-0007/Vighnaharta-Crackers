@@ -1,38 +1,44 @@
 import Link from "next/link";
 import type { Product } from "@/types";
-import { ProductGrid } from "@/components/shop/product-grid";
-import { ArrowRight, Flame } from "lucide-react";
+import { ProductCard } from "@/components/shop/product-card";
 
-export function FeaturedProducts({ products }: { products: Product[] }) {
+interface FeaturedProductsProps {
+  products: Product[];
+}
+
+export function FeaturedProducts({ products }: FeaturedProductsProps) {
   const featured = products.filter((p) => p.featured).slice(0, 8);
   const displayProducts = featured.length > 0 ? featured : products.slice(0, 8);
 
   return (
-    <section className="py-12 md:py-16 border-b border-border/60">
-      <div className="container mx-auto max-w-6xl px-4">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
+    <section className="py-12 sm:py-16 bg-[#fff9f0] border-b border-[#e9e0d5]">
+      <div className="container mx-auto max-w-6xl px-4 sm:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-400 mb-1.5">
-              <Flame className="h-3.5 w-3.5 fill-current text-primary" />
-              <span>Diwali Bestsellers</span>
-            </div>
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
-              Most Popular Firecrackers
+            <p className="font-bold text-[#b91c32] text-[11px] tracking-[2px] uppercase">
+              FEATURED PRODUCTS
+            </p>
+            <h2 className="font-heading font-semibold text-[#202d3a] text-3xl sm:text-[40px] leading-[1.15] mt-1.5">
+              Carefully selected for Diwali.
             </h2>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              Top customer favorites for festive family celebrations with guaranteed sparkle & sound.
+            <p className="text-[#737373] text-[14px] sm:text-[15px] mt-1 max-w-xl">
+              Customer favorites selected for your family festive celebration.
             </p>
           </div>
+
           <Link
             href="/shop"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 hover:underline mt-3 sm:mt-0"
+            className="font-semibold text-[#b91c32] hover:underline text-xs sm:text-sm whitespace-nowrap self-start sm:self-auto"
           >
-            <span>View All Fireworks</span>
-            <ArrowRight className="h-3.5 w-3.5" />
+            Browse all crackers ↗
           </Link>
         </div>
 
-        <ProductGrid products={displayProducts} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {displayProducts.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
       </div>
     </section>
   );

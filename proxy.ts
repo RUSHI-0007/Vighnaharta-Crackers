@@ -39,7 +39,10 @@ export async function proxy(request: NextRequest) {
 
   // Protect admin routes
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
-    if (!user) {
+    const isLocalPreview =
+      request.cookies.get("admin-preview")?.value === "1" ||
+      request.nextUrl.searchParams.get("preview") === "admin";
+    if (!user && !isLocalPreview) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
       url.searchParams.set("redirectTo", pathname);

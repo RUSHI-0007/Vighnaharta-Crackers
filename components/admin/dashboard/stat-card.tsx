@@ -21,9 +21,9 @@ export function StatCard({
 }: StatCardProps) {
   const colorMap = {
     primary: "text-primary bg-primary/10 border-primary/20",
-    accent: "text-accent bg-accent/10 border-accent/20",
-    warning: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-    success: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+    accent: "text-[#b91c32] bg-[#fbecef] border-[#b91c32]/20",
+    warning: "text-amber-700 bg-amber-50 border-amber-200",
+    success: "text-emerald-700 bg-emerald-50 border-emerald-200",
   };
 
   return (
@@ -49,4 +49,3 @@ export function StatCard({
     </div>
   );
 }
-

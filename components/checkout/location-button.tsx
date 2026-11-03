@@ -27,21 +27,21 @@ export function LocationButton({ onLocationFound, hasLocation }: LocationButtonP
       type="button"
       onClick={handleClick}
       disabled={loading}
-      className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-secondary/50 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-secondary transition-all cursor-pointer"
+      className="inline-flex items-center gap-1.5 rounded-lg border border-[#e9e0d5] bg-[#fff9f0] px-3 py-1 text-xs font-semibold text-[#b91c32] hover:bg-[#f5eddf] transition-colors cursor-pointer disabled:opacity-50"
     >
       {loading ? (
         <>
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+          <Loader2 className="h-3.5 w-3.5 animate-spin text-[#b91c32]" />
           <span>Locating...</span>
         </>
       ) : hasLocation ? (
         <>
-          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-          <span className="text-emerald-400">Location Added</span>
+          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+          <span className="text-emerald-700">Location Added</span>
         </>
       ) : (
         <>
-          <MapPin className="h-3.5 w-3.5 text-primary" />
+          <MapPin className="h-3.5 w-3.5 text-[#b91c32]" />
           <span>Use My Location</span>
         </>
       )}
