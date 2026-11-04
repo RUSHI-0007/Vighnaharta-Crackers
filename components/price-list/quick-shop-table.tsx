@@ -8,6 +8,7 @@ import { useCartStore } from "@/store/cart-store";
 import { formatCurrency } from "@/lib/format";
 import { calculateEffectivePrice, computeCartTotals } from "@/lib/pricing";
 import { useMounted } from "@/hooks/use-mounted";
+import { useTranslation } from "@/lib/translations";
 import {
   ShoppingBag,
   Search,
@@ -25,6 +26,7 @@ interface QuickShopTableProps {
 
 export function QuickShopTable({ categories, products }: QuickShopTableProps) {
   const mounted = useMounted();
+  const { t, locale } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -115,13 +117,13 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
             </div>
             <div>
               <span className="text-[11px] font-bold uppercase tracking-wider text-[#b91c32] block">
-                Wholesale Catalog
+                {t.priceList.badge}
               </span>
               <h1 className="text-xl sm:text-2xl font-serif font-bold text-[#202d3a] tracking-tight leading-tight">
-                Quick Shop / Wholesale Price List
+                {t.priceList.heading}
               </h1>
               <p className="text-xs text-[#737373]">
-                Order fireworks in bulk or family packs with instant quantity steppers
+                {t.priceList.desc}
               </p>
             </div>
           </div>
@@ -131,7 +133,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#737373]" />
             <input
               type="text"
-              placeholder="Search by name or category..."
+              placeholder={t.priceList.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-[#e9e0d5] bg-[#fff9f0]/60 text-[#202d3a] placeholder-[#737373] focus:bg-white focus:outline-none focus:border-[#b91c32]"
@@ -150,7 +152,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
                 : "bg-[#f5eddf] text-[#202d3a] hover:bg-[#e9e0d5]"
             }`}
           >
-            All ({products.length})
+            {t.priceList.all} ({products.length})
           </button>
 
           {categories.map((cat) => (
@@ -164,7 +166,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
                   : "bg-[#f5eddf] text-[#202d3a] hover:bg-[#e9e0d5]"
               }`}
             >
-              {cat.name_en}
+              {locale === "mr" ? cat.name_mr : cat.name_en}
             </button>
           ))}
         </div>
@@ -173,7 +175,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
       {/* 2. Products List */}
       {groupedProducts.length === 0 ? (
         <div className="bg-white rounded-2xl border border-[#e9e0d5] p-12 text-center text-[#737373] text-sm shadow-2xs">
-          No firecrackers found matching your search.
+          {locale === "mr" ? "तुमच्या शोधाशी जुळणारे फटाके आढळले नाहीत." : "No firecrackers found matching your search."}
         </div>
       ) : (
         <>
@@ -189,16 +191,18 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
                   <div className="flex items-center gap-2 font-bold text-xs text-[#202d3a] uppercase tracking-wide">
                     <span className="w-1.5 h-3.5 bg-[#b91c32] rounded-full inline-block" />
                     <span>
-                      {group.category ? group.category.name_en : "Other Firecrackers"}
+                      {group.category
+                        ? (locale === "mr" ? group.category.name_mr : group.category.name_en)
+                        : (locale === "mr" ? "इतर फटाके" : "Other Firecrackers")}
                     </span>
                     {group.category && (
                       <span className="text-[11px] font-normal text-[#737373]">
-                        ({group.category.name_mr})
+                        ({locale === "mr" ? group.category.name_en : group.category.name_mr})
                       </span>
                     )}
                   </div>
                   <span className="text-[10px] text-[#737373] bg-white font-mono px-2 py-0.5 rounded-full border border-[#e9e0d5]">
-                    {group.products.length}
+                    {group.products.length} {t.priceList.items.toLowerCase()}
                   </span>
                 </div>
 
@@ -237,10 +241,10 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
                         {/* Details */}
                         <div className="flex-1 min-w-0 pr-1">
                           <span className="font-semibold text-xs text-[#202d3a] block leading-snug truncate">
-                            {product.name_en}
+                            {locale === "mr" ? (product.name_mr || product.name_en) : product.name_en}
                           </span>
                           <span className="text-[11px] text-[#737373] block truncate">
-                            {product.name_mr} • {product.unit}
+                            {locale === "mr" ? product.name_en : product.name_mr} • {product.unit}
                           </span>
                           <div className="flex items-baseline gap-1.5 mt-0.5">
                             <span className="font-bold text-xs text-[#b91c32] font-mono">
@@ -303,22 +307,22 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
                 <thead className="bg-[#f5eddf] text-[11px] uppercase tracking-wider text-[#737373] border-b border-[#e9e0d5] font-bold">
                   <tr>
                     <th scope="col" className="py-3.5 px-4 min-w-[220px]">
-                      Product
+                      {t.priceList.product}
                     </th>
                     <th scope="col" className="py-3.5 px-3 text-right">
-                      MRP
+                      {t.priceList.mrp}
                     </th>
                     <th scope="col" className="py-3.5 px-3 text-right">
-                      Our Price
+                      {t.priceList.ourPrice}
                     </th>
                     <th scope="col" className="py-3.5 px-3 text-center">
-                      Savings
+                      {t.priceList.discount}
                     </th>
                     <th scope="col" className="py-3.5 px-4 text-center min-w-[120px]">
-                      Quantity
+                      {t.priceList.quantity}
                     </th>
                     <th scope="col" className="py-3.5 px-4 text-right min-w-[100px]">
-                      Amount
+                      {t.priceList.amount}
                     </th>
                   </tr>
                 </thead>
@@ -334,15 +338,17 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
                         >
                           <span className="w-1.5 h-4 bg-[#b91c32] rounded-full inline-block" />
                           <span className="font-serif text-sm">
-                            {group.category ? group.category.name_en : "Other Firecrackers"}
+                            {group.category
+                              ? (locale === "mr" ? group.category.name_mr : group.category.name_en)
+                              : (locale === "mr" ? "इतर फटाके" : "Other Firecrackers")}
                           </span>
                           {group.category && (
                             <span className="text-[11px] font-normal text-[#737373]">
-                              ({group.category.name_mr})
+                              ({locale === "mr" ? group.category.name_en : group.category.name_mr})
                             </span>
                           )}
                           <span className="text-[10px] bg-[#f5eddf] text-[#202d3a] font-mono px-2 py-0.5 rounded-full ml-auto">
-                            {group.products.length} items
+                            {group.products.length} {t.priceList.items.toLowerCase()}
                           </span>
                         </td>
                       </tr>
@@ -380,13 +386,13 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
                                 </div>
                                 <div>
                                   <span className="font-semibold text-[#202d3a] block leading-tight">
-                                    {product.name_en}
+                                    {locale === "mr" ? (product.name_mr || product.name_en) : product.name_en}
                                   </span>
                                   <span className="text-[11px] text-[#737373] block">
-                                    {product.name_mr}
+                                    {locale === "mr" ? product.name_en : product.name_mr}
                                   </span>
                                   <span className="text-[10px] text-[#737373] font-mono">
-                                    Unit: {product.unit}
+                                    {t.common.unit} {product.unit}
                                   </span>
                                 </div>
                               </div>
@@ -403,7 +409,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
                             <td className="py-3 px-3 text-center">
                               {product.discount_percent > 0 ? (
                                 <span className="inline-block bg-[#fbecef] text-[#b91c32] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#b91c32]/20">
-                                  {product.discount_percent}% OFF
+                                  {product.discount_percent}% {t.common.off}
                                 </span>
                               ) : (
                                 <span className="text-[#737373] text-[11px]">-</span>
@@ -463,7 +469,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
           <div className="flex items-center gap-3 sm:gap-6 text-xs">
             <div>
               <span className="text-[10px] uppercase text-[#c6cdd2] font-semibold block leading-none">
-                ITEMS
+                {t.priceList.items}
               </span>
               <span className="font-bold text-white text-xs sm:text-sm font-mono leading-tight">
                 {mounted ? totalCount : 0}
@@ -472,7 +478,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
 
             <div className="hidden sm:block border-l border-white/10 pl-4">
               <span className="text-[10px] uppercase text-[#c6cdd2] font-semibold block leading-none">
-                MRP TOTAL
+                {t.priceList.totalMrp}
               </span>
               <span className="font-semibold text-[#c6cdd2] text-xs line-through font-mono leading-tight">
                 {mounted ? formatCurrency(subtotal) : "₹0.00"}
@@ -482,7 +488,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
             {discountTotal > 0 && (
               <div className="border-l border-white/10 pl-3 sm:pl-4">
                 <span className="text-[10px] uppercase text-[#e9b94f] font-semibold block leading-none">
-                  SAVINGS
+                  {t.priceList.savings}
                 </span>
                 <span className="font-bold text-[#e9b94f] text-xs font-mono leading-tight">
                   {mounted ? formatCurrency(discountTotal) : "₹0.00"}
@@ -492,7 +498,7 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
 
             <div className="border-l border-white/10 pl-3 sm:pl-4">
               <span className="text-[10px] uppercase text-[#c6cdd2] font-semibold block leading-none">
-                PAYABLE
+                {t.priceList.payable}
               </span>
               <span className="font-black text-white text-sm sm:text-base font-mono leading-tight">
                 {mounted ? formatCurrency(total) : "₹0.00"}
@@ -505,14 +511,14 @@ export function QuickShopTable({ categories, products }: QuickShopTableProps) {
             {totalCount > 0 && (
               <span className="hidden lg:inline-flex items-center gap-1 text-[11px] text-[#e9b94f] font-medium">
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Items in bag</span>
+                <span>{locale === "mr" ? "बॅगमध्ये जोडले" : "Items in bag"}</span>
               </span>
             )}
             <Link
               href="/cart"
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#b91c32] hover:bg-[#981426] active:scale-95 text-white font-bold text-xs sm:text-sm px-4 sm:px-6 py-2.5 shadow-sm transition-all whitespace-nowrap cursor-pointer"
             >
-              <span>View Bag</span>
+              <span>{t.common.viewBag}</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

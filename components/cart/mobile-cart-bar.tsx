@@ -8,10 +8,12 @@ import { useMounted } from "@/hooks/use-mounted";
 import { formatCurrency } from "@/lib/format";
 import { computeCartTotals } from "@/lib/pricing";
 import { ArrowRight, ShoppingBag } from "lucide-react";
+import { useTranslation } from "@/lib/translations";
 
 export function MobileCartBar() {
   const pathname = usePathname();
   const mounted = useMounted();
+  const { t, locale } = useTranslation();
   const items = useCartStore((s) => s.items);
   const { total, totalCount } = useMemo(() => computeCartTotals(items), [items]);
 
@@ -34,7 +36,7 @@ export function MobileCartBar() {
         <div className="flex items-center gap-2">
           <ShoppingBag className="h-4 w-4" />
           <span className="text-xs font-semibold tracking-wide">
-            View Bag ({totalCount} {totalCount === 1 ? "item" : "items"})
+            {t.common.viewBag} ({totalCount} {locale === "mr" ? t.common.items : totalCount === 1 ? "item" : "items"})
           </span>
         </div>
         <div className="flex items-center gap-1.5 text-xs font-semibold">

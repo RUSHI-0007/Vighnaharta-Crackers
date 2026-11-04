@@ -1,6 +1,7 @@
 "use client";
 
 import { useGeolocation } from "@/hooks/use-geolocation";
+import { useTranslation } from "@/lib/translations";
 import { MapPin, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -11,14 +12,23 @@ interface LocationButtonProps {
 
 export function LocationButton({ onLocationFound, hasLocation }: LocationButtonProps) {
   const { loading, getLocation } = useGeolocation();
+  const { t, locale } = useTranslation();
 
   const handleClick = async () => {
     const coords = await getLocation();
     if (coords) {
       onLocationFound(coords);
-      toast.success("Location attached successfully!");
+      toast.success(
+        locale === "mr"
+          ? "लोकेशन जोडण्यात आले!"
+          : "Location attached successfully!"
+      );
     } else {
-      toast.error("Could not fetch location. Please enter address manually.");
+      toast.error(
+        locale === "mr"
+          ? "लोकेशन मिळू शकले नाही. कृपया पत्ता स्वतः टाईप करा."
+          : "Could not fetch location. Please enter address manually."
+      );
     }
   };
 
@@ -32,17 +42,19 @@ export function LocationButton({ onLocationFound, hasLocation }: LocationButtonP
       {loading ? (
         <>
           <Loader2 className="h-3.5 w-3.5 animate-spin text-[#b91c32]" />
-          <span>Locating...</span>
+          <span>{locale === "mr" ? "लोकेशन शोधत आहे..." : "Locating..."}</span>
         </>
       ) : hasLocation ? (
         <>
           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-          <span className="text-emerald-700">Location Added</span>
+          <span className="text-emerald-700">
+            {locale === "mr" ? "लोकेशन जोडले" : "Location Added"}
+          </span>
         </>
       ) : (
         <>
           <MapPin className="h-3.5 w-3.5 text-[#b91c32]" />
-          <span>Use My Location</span>
+          <span>{t.checkout.locationBtn}</span>
         </>
       )}
     </button>

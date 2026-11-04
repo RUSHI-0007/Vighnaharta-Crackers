@@ -5,11 +5,13 @@ import { trackOrderAction } from "@/actions/track";
 import { TrackResult } from "@/components/track/track-result";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTranslation } from "@/lib/translations";
 import { toast } from "sonner";
 import { PackageSearch, Loader2, ArrowRight } from "lucide-react";
 import type { OrderTrackingInfo } from "@/types";
 
 export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
+  const { t, locale } = useTranslation();
   const [orderCode, setOrderCode] = useState(initialCode);
   const [phone, setPhone] = useState("");
   const [orderData, setOrderData] = useState<OrderTrackingInfo | null>(null);
@@ -19,11 +21,19 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
     e.preventDefault();
 
     if (!orderCode.trim()) {
-      toast.error("Please enter your Order Code (e.g. VFS-...).");
+      toast.error(
+        locale === "mr"
+          ? "कृपया तुमचा ऑर्डर कोड टाका (उदा. VFS-...)."
+          : "Please enter your Order Code (e.g. VFS-...)."
+      );
       return;
     }
     if (!/^[6-9]\d{9}$/.test(phone.trim())) {
-      toast.error("Please enter your registered 10-digit phone number.");
+      toast.error(
+        locale === "mr"
+          ? "कृपया नोंदणीकृत १०-अंकी मोबाईल नंबर टाका."
+          : "Please enter your registered 10-digit phone number."
+      );
       return;
     }
 
@@ -35,10 +45,15 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
       const res = await trackOrderAction(null, formData);
       if (res.ok && res.data) {
         setOrderData(res.data);
-        toast.success("Order found!");
+        toast.success(locale === "mr" ? "ऑर्डर सापडली!" : "Order found!");
       } else {
         setOrderData(null);
-        toast.error(res.error || "Order not found. Please verify the code and phone number.");
+        toast.error(
+          res.error ||
+            (locale === "mr"
+              ? "ऑर्डर सापडली नाही. कोड आणि मोबाईल नंबर तपासा."
+              : "Order not found. Please verify the code and phone number.")
+        );
       }
     });
   };
@@ -51,21 +66,21 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="orderCode" className="text-xs font-semibold text-[#202d3a]">
-                Order Tracking Code *
+                {locale === "mr" ? "ऑर्डर ट्रॅकिंग कोड *" : "Order Tracking Code *"}
               </Label>
               <Input
                 id="orderCode"
                 required
                 value={orderCode}
                 onChange={(e) => setOrderCode(e.target.value)}
-                placeholder="e.g. VFS-261103-XXXX"
+                placeholder={t.track.codePlaceholder}
                 className="font-mono uppercase bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-xs sm:text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
               />
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="phone" className="text-xs font-semibold text-[#202d3a]">
-                Registered Phone Number *
+                {locale === "mr" ? "नोंदणीकृत मोबाईल नंबर *" : "Registered Phone Number *"}
               </Label>
               <Input
                 id="phone"
@@ -74,7 +89,7 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
                 maxLength={10}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                placeholder="10-digit mobile number"
+                placeholder={t.track.phonePlaceholder}
                 className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-xs sm:text-sm font-mono text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
               />
             </div>
@@ -88,12 +103,12 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
             {isPending ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Locating order...</span>
+                <span>{locale === "mr" ? "शोधत आहे..." : "Locating order..."}</span>
               </>
             ) : (
               <>
                 <PackageSearch className="h-4 w-4" />
-                <span>Check Live Status</span>
+                <span>{t.track.trackBtn}</span>
                 <ArrowRight className="h-4 w-4" />
               </>
             )}
@@ -101,7 +116,7 @@ export function TrackForm({ initialCode = "" }: { initialCode?: string }) {
         </form>
       </div>
 
-      {/* Result Display */}
+      {/* Results Display */}
       {orderData && <TrackResult order={orderData} />}
     </div>
   );

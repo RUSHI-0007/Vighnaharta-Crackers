@@ -3,6 +3,7 @@
 import type { PaymentMethod, Settings } from "@/types";
 import { QrCode, Banknote } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/translations";
 
 interface PaymentMethodSelectProps {
   settings: Settings;
@@ -15,6 +16,7 @@ export function PaymentMethodSelect({
   value,
   onChange,
 }: PaymentMethodSelectProps) {
+  const { t, locale } = useTranslation();
   const { upi_enabled, cod_enabled } = settings;
 
   if (upi_enabled && !cod_enabled) {
@@ -24,9 +26,11 @@ export function PaymentMethodSelect({
           <QrCode className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-sm font-bold text-[#202d3a]">UPI QR Code</p>
+          <p className="text-sm font-bold text-[#202d3a]">{t.checkout.upi}</p>
           <p className="text-xs text-[#737373]">
-            Scan QR using GPay, PhonePe, or Paytm and upload receipt
+            {locale === "mr"
+              ? "GPay, PhonePe किंवा Paytm द्वारे स्कॅन करून पेमेंट स्क्रीनशॉट अपलोड करा"
+              : "Scan QR using GPay, PhonePe, or Paytm and upload receipt"}
           </p>
         </div>
       </div>
@@ -40,8 +44,12 @@ export function PaymentMethodSelect({
           <Banknote className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-sm font-bold text-[#202d3a]">Cash on Delivery / Pickup</p>
-          <p className="text-xs text-[#737373]">Pay cash when fireworks arrive or at stall</p>
+          <p className="text-sm font-bold text-[#202d3a]">{t.checkout.cod}</p>
+          <p className="text-xs text-[#737373]">
+            {locale === "mr"
+              ? "फटाके आल्यावर किंवा स्टॉलवर रोख पैसे द्या"
+              : "Pay cash when fireworks arrive or at stall"}
+          </p>
         </div>
       </div>
     );
@@ -80,14 +88,16 @@ export function PaymentMethodSelect({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between">
             <span className="text-xs sm:text-sm font-bold text-[#202d3a]">
-              UPI QR Code
+              {t.checkout.upi}
             </span>
             <span className="text-[10px] uppercase font-bold text-[#b91c32] bg-[#b91c32]/10 px-1.5 py-0.5 rounded">
-              Instant
+              {locale === "mr" ? "झटपट" : "Instant"}
             </span>
           </div>
           <p className="text-[11px] text-[#737373] mt-1 leading-snug">
-            Pay via GPay, PhonePe, or Paytm and upload screenshot
+            {locale === "mr"
+              ? "GPay, PhonePe द्वारे स्कॅन करा व स्क्रीनशॉट जोडा"
+              : "Pay via GPay, PhonePe, or Paytm and upload screenshot"}
           </p>
         </div>
       </div>
@@ -122,10 +132,12 @@ export function PaymentMethodSelect({
         </div>
         <div className="flex-1 min-w-0">
           <span className="text-xs sm:text-sm font-bold text-[#202d3a]">
-            Cash on Delivery
+            {t.checkout.cod}
           </span>
           <p className="text-[11px] text-[#737373] mt-1 leading-snug">
-            Pay cash upon delivery or when collecting at stall
+            {locale === "mr"
+              ? "डिलिव्हरीच्या वेळी किंवा स्टॉलवरून घेताना रोख द्या"
+              : "Pay cash upon delivery or when collecting at stall"}
           </p>
         </div>
       </div>

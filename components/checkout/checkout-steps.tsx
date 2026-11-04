@@ -1,4 +1,7 @@
+"use client";
+
 import { Check } from "lucide-react";
+import { useTranslation } from "@/lib/translations";
 
 interface CheckoutStepsProps {
   currentStep: number;
@@ -6,18 +9,37 @@ interface CheckoutStepsProps {
 }
 
 export function CheckoutSteps({ currentStep, paymentMethod = "upi_qr" }: CheckoutStepsProps) {
+  const { locale } = useTranslation();
+
+  const labels =
+    locale === "mr"
+      ? {
+          bag: "१. बॅग",
+          delivery: "२. डिलिव्हरी",
+          upiProof: "३. UPI पुरावा",
+          statusCod: "३. ऑर्डर स्थिती",
+          statusUpi: "४. ऑर्डर स्थिती",
+        }
+      : {
+          bag: "Bag",
+          delivery: "Delivery",
+          upiProof: "UPI proof",
+          statusCod: "Status",
+          statusUpi: "Status",
+        };
+
   const steps =
     paymentMethod === "cod"
       ? [
-          { number: 1, label: "Bag" },
-          { number: 2, label: "Delivery" },
-          { number: 3, label: "Status" },
+          { number: 1, label: labels.bag },
+          { number: 2, label: labels.delivery },
+          { number: 3, label: labels.statusCod },
         ]
       : [
-          { number: 1, label: "Bag" },
-          { number: 2, label: "Delivery" },
-          { number: 3, label: "UPI proof" },
-          { number: 4, label: "Status" },
+          { number: 1, label: labels.bag },
+          { number: 2, label: labels.delivery },
+          { number: 3, label: labels.upiProof },
+          { number: 4, label: labels.statusUpi },
         ];
 
   return (

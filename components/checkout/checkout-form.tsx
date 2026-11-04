@@ -17,6 +17,7 @@ import { CodNotice } from "@/components/checkout/cod-notice";
 import { CheckoutSteps } from "@/components/checkout/checkout-steps";
 import { formatCurrency } from "@/lib/format";
 import { siteConfig } from "@/config/site";
+import { useTranslation } from "@/lib/translations";
 import { toast } from "sonner";
 import {
   Loader2,
@@ -42,6 +43,7 @@ interface FormValues {
 export function CheckoutForm({ settings }: { settings: Settings }) {
   const router = useRouter();
   const mounted = useMounted();
+  const { t, locale } = useTranslation();
   const items = useCartStore((s) => s.items);
   const clearCart = useCartStore((s) => s.clearCart);
   const { total } = useMemo(() => computeCartTotals(items), [items]);
@@ -77,15 +79,19 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
   if (items.length === 0) {
     return (
       <div className="text-center py-16 rounded-2xl border border-[#e9e0d5] p-8 bg-white space-y-4 shadow-2xs">
-        <h3 className="text-lg font-serif font-bold text-[#202d3a]">Your Bag is Empty</h3>
+        <h3 className="text-lg font-serif font-bold text-[#202d3a]">
+          {t.cart.empty}
+        </h3>
         <p className="text-xs sm:text-sm text-[#737373] max-w-sm mx-auto">
-          Please select fireworks from our festive collection before checking out.
+          {locale === "mr"
+            ? "चेकआउट करण्यापूर्वी कृपया आमच्या दिवाळी कलेक्शनमधून फटाके निवडा."
+            : "Please select fireworks from our festive collection before checking out."}
         </p>
         <Button
           onClick={() => router.push("/shop")}
           className="bg-[#b91c32] text-white font-bold rounded-xl px-5 py-2 hover:bg-[#981426]"
         >
-          Browse Catalog &rarr;
+          {locale === "mr" ? "कॅटलॉग पहा →" : "Browse Catalog →"}
         </Button>
       </div>
     );
@@ -95,9 +101,13 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
     return (
       <div className="text-center py-16 rounded-2xl border border-[#e9e0d5] p-8 bg-white space-y-4 shadow-2xs">
         <AlertCircle className="h-10 w-10 text-[#b91c32] mx-auto" />
-        <h3 className="text-lg font-serif font-bold text-[#202d3a]">Orders Paused</h3>
+        <h3 className="text-lg font-serif font-bold text-[#202d3a]">
+          {locale === "mr" ? "ऑर्डर्स तात्पुरत्या बंद आहेत" : "Orders Paused"}
+        </h3>
         <p className="text-xs sm:text-sm text-[#737373] max-w-sm mx-auto">
-          We are temporarily not taking new orders. Please contact our stall directly.
+          {locale === "mr"
+            ? "सध्या आम्ही नवीन ऑनलाइन ऑर्डर्स घेत नाही आहोत. कृपया थेट आमच्या स्टॉलशी संपर्क साधा."
+            : "We are temporarily not taking new orders. Please contact our stall directly."}
         </p>
       </div>
     );
@@ -107,7 +117,11 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
     const valid = await trigger(["name", "phone", "email", "address"]);
     if (valid) {
       if (total < settings.min_order_amount) {
-        toast.error(`Minimum order amount is ${formatCurrency(settings.min_order_amount)}`);
+        toast.error(
+          locale === "mr"
+            ? `किमान ऑर्डर मर्यादा ${formatCurrency(settings.min_order_amount)} आहे`
+            : `Minimum order amount is ${formatCurrency(settings.min_order_amount)}`
+        );
         return;
       }
       setStep(3);
@@ -117,18 +131,26 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
 
   const onSubmit = async (values: FormValues) => {
     if (values.honeypot) {
-      toast.error("Invalid submission");
+      toast.error(locale === "mr" ? "अवैध सबमिशन" : "Invalid submission");
       return;
     }
 
     if (total < settings.min_order_amount) {
-      toast.error(`Minimum order amount is ${formatCurrency(settings.min_order_amount)}`);
+      toast.error(
+        locale === "mr"
+          ? `किमान ऑर्डर मर्यादा ${formatCurrency(settings.min_order_amount)} आहे`
+          : `Minimum order amount is ${formatCurrency(settings.min_order_amount)}`
+      );
       return;
     }
 
     if (paymentMethod === "upi_qr" && !screenshot) {
-      setScreenshotError("Please upload your UPI payment screenshot to complete the order.");
-      toast.error("Payment screenshot is required for UPI orders!");
+      const msg =
+        locale === "mr"
+          ? "ऑर्डर पूर्ण करण्यासाठी कृपया UPI पेमेंटचा स्क्रीनशॉट अपलोड करा."
+          : "Please upload your UPI payment screenshot to complete the order.";
+      setScreenshotError(msg);
+      toast.error(msg);
       return;
     }
 
@@ -169,7 +191,11 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
       }
 
       clearCart();
-      toast.success("Order placed successfully! Confirmation sent to your email.");
+      toast.success(
+        locale === "mr"
+          ? "ऑर्डर यशस्वीरित्या नोंदवली गेली! ईमेलवर माहिती पाठवली आहे."
+          : "Order placed successfully! Confirmation sent to your email."
+      );
       router.push(
         `/order-success?code=${result.data.orderCode}&email=${encodeURIComponent(
           values.email.trim()
@@ -208,9 +234,13 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
                 <User className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-[#202d3a]">1. Delivery Details</h3>
+                <h3 className="text-sm font-bold text-[#202d3a]">
+                  {t.checkout.deliveryDetails}
+                </h3>
                 <p className="text-xs text-[#737373]">
-                  Where should we deliver your crackers in Ganegaon Khalsa or nearby?
+                  {locale === "mr"
+                    ? "गणेगाव खालसा किंवा जवळ फटाके कुठे पोहोचवायचे आहेत?"
+                    : "Where should we deliver your crackers in Ganegaon Khalsa or nearby?"}
                 </p>
               </div>
             </div>
@@ -218,15 +248,18 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="name" className="text-xs font-semibold text-[#202d3a]">
-                  Full Name *
+                  {t.checkout.fullName} *
                 </Label>
                 <Input
                   id="name"
                   {...register("name", {
-                    required: "Please enter your full name",
-                    minLength: { value: 2, message: "Name must be at least 2 characters" },
+                    required: locale === "mr" ? "कृपया तुमचे पूर्ण नाव टाका" : "Please enter your full name",
+                    minLength: {
+                      value: 2,
+                      message: locale === "mr" ? "नाव किमान २ अक्षरांचे असावे" : "Name must be at least 2 characters",
+                    },
                   })}
-                  placeholder="e.g. Rahul Shinde"
+                  placeholder={locale === "mr" ? "उदा. राहुल शिंदे" : "e.g. Rahul Shinde"}
                   className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
                 />
                 {errors.name && (
@@ -236,17 +269,17 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
 
               <div className="space-y-1.5">
                 <Label htmlFor="phone" className="text-xs font-semibold text-[#202d3a]">
-                  Phone Number (10 Digits) *
+                  {t.checkout.phoneNumber} *
                 </Label>
                 <Input
                   id="phone"
                   type="tel"
                   maxLength={10}
                   {...register("phone", {
-                    required: "Please enter your phone number",
+                    required: locale === "mr" ? "कृपया मोबाईल नंबर टाका" : "Please enter your phone number",
                     pattern: {
                       value: /^[6-9]\d{9}$/,
-                      message: "Enter a valid 10-digit mobile number",
+                      message: locale === "mr" ? "कृपया वैध १०-अंकी नंबर टाका" : "Enter a valid 10-digit mobile number",
                     },
                   })}
                   placeholder="e.g. 9876543210"
@@ -260,16 +293,16 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
 
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-xs font-semibold text-[#202d3a]">
-                Email Address (for Itemized Order Receipt) *
+                {t.checkout.email} *
               </Label>
               <Input
                 id="email"
                 type="email"
                 {...register("email", {
-                  required: "Email is required for your order confirmation receipt",
+                  required: locale === "mr" ? "ऑर्डर पावतीसाठी ईमेल आवश्यक आहे" : "Email is required for your order confirmation receipt",
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Please enter a valid email address",
+                    message: locale === "mr" ? "कृपया वैध ईमेल टाका" : "Please enter a valid email address",
                   },
                 })}
                 placeholder="e.g. rahul@gmail.com"
@@ -283,7 +316,7 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <Label htmlFor="address" className="text-xs font-semibold text-[#202d3a]">
-                  Delivery Address *
+                  {t.checkout.deliveryAddress} *
                 </Label>
                 <LocationButton
                   onLocationFound={setCoords}
@@ -294,10 +327,13 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
                 id="address"
                 rows={2}
                 {...register("address", {
-                  required: "Detailed delivery address is required",
-                  minLength: { value: 5, message: "Address must be at least 5 characters" },
+                  required: locale === "mr" ? "डिलिव्हरीचा पूर्ण पत्ता आवश्यक आहे" : "Detailed delivery address is required",
+                  minLength: {
+                    value: 5,
+                    message: locale === "mr" ? "पत्ता किमान ५ अक्षरांचा असावा" : "Address must be at least 5 characters",
+                  },
                 })}
-                placeholder="House/flat number, road, area, village..."
+                placeholder={locale === "mr" ? "घर/फ्लॅट क्र., रस्ता, गल्ली, गाव..." : "House/flat number, road, area, village..."}
                 className="bg-[#fff9f0]/60 border-[#e9e0d5] rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32] min-h-[70px]"
               />
               {errors.address && (
@@ -308,24 +344,24 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="landmark" className="text-xs font-semibold text-[#202d3a]">
-                  Nearby Landmark (Optional)
+                  {t.checkout.landmark}
                 </Label>
                 <Input
                   id="landmark"
                   {...register("landmark")}
-                  placeholder="e.g. Near Grampanchayat / Temple"
+                  placeholder={locale === "mr" ? "उदा. ग्रामपंचायत जवळ / मंदिर" : "e.g. Near Grampanchayat / Temple"}
                   className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <Label htmlFor="notes" className="text-xs font-semibold text-[#202d3a]">
-                  Special Delivery Notes (Optional)
+                  {t.checkout.notes}
                 </Label>
                 <Input
                   id="notes"
                   {...register("notes")}
-                  placeholder="e.g. Deliver before 6 PM"
+                  placeholder={locale === "mr" ? "उदा. संध्याकाळी ६ वाजेपूर्वी आणा" : "e.g. Deliver before 6 PM"}
                   className="bg-[#fff9f0]/60 border-[#e9e0d5] h-11 rounded-xl text-sm text-[#202d3a] focus:bg-white focus:border-[#b91c32]"
                 />
               </div>
@@ -339,9 +375,13 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
                 <CreditCard className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-[#202d3a]">2. Payment Method</h3>
+                <h3 className="text-sm font-bold text-[#202d3a]">
+                  {t.checkout.paymentMethod}
+                </h3>
                 <p className="text-xs text-[#737373]">
-                  Select Instant UPI QR Code or Cash on Delivery / Stall Pickup
+                  {locale === "mr"
+                    ? "झटपट UPI क्यूआर कोड किंवा कॅश ऑन डिलिव्हरी / स्टॉल पिकअप निवडा"
+                    : "Select Instant UPI QR Code or Cash on Delivery / Stall Pickup"}
                 </p>
               </div>
             </div>
@@ -366,7 +406,11 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
                 onClick={handleProceedToUpi}
                 className="w-full min-h-[48px] rounded-xl bg-[#b91c32] text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#981426] active:scale-98 transition-all cursor-pointer shadow-xs"
               >
-                <span>Continue to UPI Payment ({formatCurrency(total)})</span>
+                <span>
+                  {locale === "mr"
+                    ? `UPI पेमेंटकडे जा (${formatCurrency(total)})`
+                    : `Continue to UPI Payment (${formatCurrency(total)})`}
+                </span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             ) : (
@@ -378,11 +422,19 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
                 {loading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Placing Cash on Delivery Order...</span>
+                    <span>
+                      {locale === "mr"
+                        ? "कॅश ऑन डिलिव्हरी ऑर्डर नोंदवत आहे..."
+                        : "Placing Cash on Delivery Order..."}
+                    </span>
                   </>
                 ) : (
                   <>
-                    <span>Place Cash on Delivery Order ({formatCurrency(total)})</span>
+                    <span>
+                      {locale === "mr"
+                        ? `कॅश ऑन डिलिव्हरी ऑर्डर द्या (${formatCurrency(total)})`
+                        : `Place Cash on Delivery Order (${formatCurrency(total)})`}
+                    </span>
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}
@@ -392,7 +444,9 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
             <div className="flex items-center justify-center gap-1.5 text-xs text-[#737373] text-center">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
               <span>
-                Order dispatched directly by {siteConfig.owner.en} at {siteConfig.name.en} stall
+                {locale === "mr"
+                  ? `${siteConfig.owner.mr} (${siteConfig.name.mr}) यांच्याकडून थेट पाठवले जाईल`
+                  : `Order dispatched directly by ${siteConfig.owner.en} at ${siteConfig.name.en} stall`}
               </span>
             </div>
           </div>
@@ -407,7 +461,9 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#b91c32] hover:underline cursor-pointer"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Delivery Details</span>
+            <span>
+              {locale === "mr" ? "डिलिव्हरी तपशीलाकडे मागे जा" : "Back to Delivery Details"}
+            </span>
           </button>
 
           <PaymentPanel
@@ -426,11 +482,19 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Submitting Order & Proof...</span>
+                  <span>
+                    {locale === "mr"
+                      ? "ऑर्डर व पेमेंट पुरावा सबमिट होत आहे..."
+                      : "Submitting Order & Proof..."}
+                  </span>
                 </>
               ) : (
                 <>
-                  <span>Submit Order with Payment Proof ({formatCurrency(total)})</span>
+                  <span>
+                    {locale === "mr"
+                      ? `ऑर्डर आणि पेमेंट पुरावा सबमिट करा (${formatCurrency(total)})`
+                      : `Submit Order with Payment Proof (${formatCurrency(total)})`}
+                  </span>
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
@@ -439,7 +503,9 @@ export function CheckoutForm({ settings }: { settings: Settings }) {
             <div className="flex items-center justify-center gap-1.5 text-xs text-[#737373] text-center">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
               <span>
-                Screenshot verified directly by {siteConfig.owner.en}
+                {locale === "mr"
+                  ? `स्क्रीनशॉटची थेट ${siteConfig.owner.mr} यांच्याद्वारे पडताळणी केली जाईल`
+                  : `Screenshot verified directly by ${siteConfig.owner.en}`}
               </span>
             </div>
           </div>

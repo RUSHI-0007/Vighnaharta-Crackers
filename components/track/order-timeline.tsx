@@ -1,6 +1,9 @@
+"use client";
+
 import type { OrderStatus } from "@/types";
 import { Check, Clock, Truck, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/translations";
 
 interface OrderTimelineProps {
   status: OrderStatus;
@@ -8,6 +11,8 @@ interface OrderTimelineProps {
 }
 
 export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
+  const { locale } = useTranslation();
+
   if (status === "cancelled") {
     return (
       <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-center space-y-2">
@@ -15,26 +20,33 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
           <XCircle className="h-5 w-5" />
         </div>
         <h4 className="text-sm font-bold text-rose-800">
-          Order Cancelled
+          {locale === "mr" ? "ऑर्डर रद्द करण्यात आली" : "Order Cancelled"}
         </h4>
         {adminNote ? (
           <p className="text-xs text-rose-900 bg-rose-100/70 p-2.5 rounded-lg max-w-md mx-auto">
-            <strong>Reason:</strong> {adminNote}
+            <strong>{locale === "mr" ? "कारण:" : "Reason:"}</strong> {adminNote}
           </p>
         ) : (
           <p className="text-xs text-[#737373]">
-            This order was cancelled due to an issue with payment verification or stock availability.
+            {locale === "mr"
+              ? "पेमेंट पडताळणी किंवा स्टॉक अनुपलब्धतेमुळे ही ऑर्डर रद्द केली गेली आहे."
+              : "This order was cancelled due to an issue with payment verification or stock availability."}
           </p>
         )}
       </div>
     );
   }
 
-  const steps: Array<{ key: OrderStatus; titleEn: string; icon: typeof Clock }> = [
-    { key: "pending", titleEn: "Placed", icon: Clock },
-    { key: "confirmed", titleEn: "Confirmed", icon: Check },
-    { key: "out_for_delivery", titleEn: "Out for Delivery", icon: Truck },
-    { key: "delivered", titleEn: "Delivered", icon: CheckCircle2 },
+  const steps: Array<{
+    key: OrderStatus;
+    titleEn: string;
+    titleMr: string;
+    icon: typeof Clock;
+  }> = [
+    { key: "pending", titleEn: "Placed", titleMr: "नोंदवली", icon: Clock },
+    { key: "confirmed", titleEn: "Confirmed", titleMr: "निश्चित", icon: Check },
+    { key: "out_for_delivery", titleEn: "Out for Delivery", titleMr: "डिलिव्हरीसाठी मार्गस्थ", icon: Truck },
+    { key: "delivered", titleEn: "Delivered", titleMr: "पोहोचवली", icon: CheckCircle2 },
   ];
 
   const statusOrder: Record<string, number> = {
@@ -86,7 +98,7 @@ export function OrderTimeline({ status, adminNote }: OrderTimelineProps) {
                     : "text-[#737373]"
                 )}
               >
-                {step.titleEn}
+                {locale === "mr" ? step.titleMr : step.titleEn}
               </span>
             </div>
           );

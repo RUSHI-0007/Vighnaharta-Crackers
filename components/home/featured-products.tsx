@@ -1,12 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import type { Product } from "@/types";
 import { ProductCard } from "@/components/shop/product-card";
+import { useTranslation } from "@/lib/translations";
 
 interface FeaturedProductsProps {
   products: Product[];
 }
 
 export function FeaturedProducts({ products }: FeaturedProductsProps) {
+  const { t } = useTranslation();
   const featured = products.filter((p) => p.featured).slice(0, 8);
   const displayProducts = featured.length > 0 ? featured : products.slice(0, 8);
 
@@ -16,13 +20,13 @@ export function FeaturedProducts({ products }: FeaturedProductsProps) {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
             <p className="font-bold text-[#b91c32] text-[11px] tracking-[2px] uppercase">
-              FEATURED PRODUCTS
+              {t.featured.badge}
             </p>
             <h2 className="font-heading font-semibold text-[#202d3a] text-3xl sm:text-[40px] leading-[1.15] mt-1.5">
-              Carefully selected for Diwali.
+              {t.featured.heading}
             </h2>
             <p className="text-[#737373] text-[14px] sm:text-[15px] mt-1 max-w-xl">
-              Customer favorites selected for your family festive celebration.
+              {t.featured.desc}
             </p>
           </div>
 
@@ -30,7 +34,7 @@ export function FeaturedProducts({ products }: FeaturedProductsProps) {
             href="/shop"
             className="font-semibold text-[#b91c32] hover:underline text-xs sm:text-sm whitespace-nowrap self-start sm:self-auto"
           >
-            Browse all crackers ↗
+            {t.featured.browseAll}
           </Link>
         </div>
 

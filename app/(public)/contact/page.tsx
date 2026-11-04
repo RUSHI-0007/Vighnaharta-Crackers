@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import {
   Phone,
@@ -151,12 +152,14 @@ export default function ContactPage() {
           {/* Right Column: Stall Photo & Quick Action */}
           <div className="md:col-span-5 space-y-4">
             <div className="bg-white rounded-2xl border border-[#e9e0d5] p-3.5 shadow-2xs">
-              <div className="relative rounded-xl overflow-hidden bg-[#fff9f0] border border-[#e9e0d5]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/banner.webp"
-                  alt={`${siteConfig.name.en} Stall Photo`}
-                  className="w-full h-auto object-cover"
+              <div className="relative rounded-xl overflow-hidden bg-[#202d3a] border border-[#e9e0d5] aspect-[3/2] w-full">
+                <Image
+                  src="/images/hero-poster.webp"
+                  alt={`${siteConfig.name.mr} - ${siteConfig.name.en}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 420px"
+                  priority
                 />
               </div>
               <div className="p-3 text-xs text-[#737373] space-y-1">

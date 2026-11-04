@@ -5,9 +5,11 @@ import type { CartItem as CartItemType } from "@/types";
 import { useCartStore } from "@/store/cart-store";
 import { QuantityStepper } from "@/components/cart/quantity-stepper";
 import { formatCurrency } from "@/lib/format";
+import { useTranslation } from "@/lib/translations";
 import { Trash2 } from "lucide-react";
 
 export function CartItemRow({ item }: { item: CartItemType }) {
+  const { locale } = useTranslation();
   const setQty = useCartStore((s) => s.setQty);
   const removeItem = useCartStore((s) => s.removeItem);
   const lineTotal = item.unit_price * item.quantity;
@@ -28,9 +30,11 @@ export function CartItemRow({ item }: { item: CartItemType }) {
       {/* Details */}
       <div className="flex-1 min-w-0">
         <h4 className="font-semibold text-sm text-[#202d3a] leading-snug line-clamp-1">
-          {item.name_en}
+          {locale === "mr" ? (item.name_mr || item.name_en) : item.name_en}
         </h4>
-        <p className="text-[11px] text-[#737373] truncate font-medium">{item.name_mr}</p>
+        <p className="text-[11px] text-[#737373] truncate font-medium">
+          {locale === "mr" ? item.name_en : item.name_mr}
+        </p>
         <p className="text-xs font-bold text-[#b91c32] mt-0.5">
           {formatCurrency(item.unit_price)}{" "}
           <span className="text-[10px] text-[#737373] font-normal">/ {item.unit}</span>

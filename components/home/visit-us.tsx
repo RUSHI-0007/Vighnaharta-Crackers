@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { useTranslation } from "@/lib/translations";
 import { BookOpen, Shield, Droplets, Phone, MapPin, ArrowRight } from "lucide-react";
 
 export function VisitUs() {
+  const { t, locale, pick } = useTranslation();
+
   return (
     <section className="py-12 sm:py-16 bg-[#fff9f0] border-b border-[#e9e0d5]">
       <div className="container mx-auto max-w-6xl px-4 sm:px-8 space-y-12 sm:space-y-16">
@@ -11,20 +16,20 @@ export function VisitUs() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-5 space-y-3">
             <span className="font-bold text-[#b91c32] text-[11px] tracking-[2px] uppercase">
-              RESPONSIBLE CELEBRATION
+              {t.visitUs.badge}
             </span>
             <h2 className="font-heading font-semibold text-[#202d3a] text-2xl sm:text-4xl leading-tight">
-              Safety at the heart of every spark.
+              {t.visitUs.heading}
             </h2>
             <p className="text-[#737373] text-xs sm:text-sm leading-relaxed">
-              We care about safe festive traditions. Follow simple safety habits to keep everyone protected and smiling.
+              {t.visitUs.desc}
             </p>
             <div className="pt-1">
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#b91c32] hover:underline"
               >
-                <span>Read stall safety tips & directions</span>
+                <span>{t.visitUs.readTips}</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -37,10 +42,10 @@ export function VisitUs() {
               </div>
               <div>
                 <h3 className="font-heading font-medium text-[#202d3a] text-sm sm:text-base">
-                  Always read directions before lighting
+                  {t.visitUs.tip1Title}
                 </h3>
-                <p className="text-[#737373] text-xs mt-0.5 leading-relaxed">
-                  Ignite fireworks only in open outdoor areas away from dry grass, vehicles, and overhead wires.
+                <p className="text-[#737373] text-xs mt-0.5 leading-relaxed font-body">
+                  {t.visitUs.tip1Desc}
                 </p>
               </div>
             </div>
@@ -51,10 +56,10 @@ export function VisitUs() {
               </div>
               <div>
                 <h3 className="font-heading font-medium text-[#202d3a] text-sm sm:text-base">
-                  Adult supervision mandatory for children
+                  {t.visitUs.tip2Title}
                 </h3>
-                <p className="text-[#737373] text-xs mt-0.5 leading-relaxed">
-                  Never leave youngsters unattended with sparklers, flower pots, or ground chakkars.
+                <p className="text-[#737373] text-xs mt-0.5 leading-relaxed font-body">
+                  {t.visitUs.tip2Desc}
                 </p>
               </div>
             </div>
@@ -65,10 +70,10 @@ export function VisitUs() {
               </div>
               <div>
                 <h3 className="font-heading font-medium text-[#202d3a] text-sm sm:text-base">
-                  Keep water and sand buckets ready
+                  {t.visitUs.tip3Title}
                 </h3>
-                <p className="text-[#737373] text-xs mt-0.5 leading-relaxed">
-                  Immerse spent sparkler sticks immediately in a bucket of water to avoid accidental burns.
+                <p className="text-[#737373] text-xs mt-0.5 leading-relaxed font-body">
+                  {t.visitUs.tip3Desc}
                 </p>
               </div>
             </div>
@@ -79,13 +84,13 @@ export function VisitUs() {
         <div className="bg-[#f5eddf] border border-[#e9e0d5] rounded-[16px] p-6 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xs">
           <div className="space-y-2 text-center md:text-left max-w-xl">
             <span className="font-bold text-[#b91c32] text-[11px] tracking-[2px] uppercase">
-              LOCAL STALL SERVICE
+              {pick("LOCAL STALL SERVICE", "स्थानिक स्टॉल सेवा")}
             </span>
             <h3 className="font-heading font-semibold text-[#202d3a] text-2xl sm:text-3xl">
-              Visit our Ganegaon Khalsa stall.
+              {pick("Visit our Ganegaon Khalsa stall.", "आमच्या गणेगाव खालसा स्टॉलला भेट द्या.")}
             </h3>
             <p className="text-[#737373] text-xs sm:text-sm leading-relaxed">
-              Open daily 8:00 AM – 10:00 PM throughout the festive season. {siteConfig.address.en}.
+              {t.common.stallHours}. {siteConfig.address[locale]}.
             </p>
           </div>
 
@@ -95,7 +100,7 @@ export function VisitUs() {
               className="bg-[#b91c32] hover:bg-[#991b1b] text-white font-semibold text-xs sm:text-sm h-11 px-5 rounded-[10px] inline-flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-sm"
             >
               <Phone className="h-4 w-4" />
-              <span>Call +91 {siteConfig.phone}</span>
+              <span>{pick("Call", "कॉल करा")} +91 {siteConfig.phone}</span>
             </a>
 
             <a
@@ -105,7 +110,7 @@ export function VisitUs() {
               className="bg-white border border-[#e9e0d5] hover:bg-slate-50 text-[#202d3a] font-semibold text-xs sm:text-sm h-11 px-5 rounded-[10px] inline-flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-2xs"
             >
               <MapPin className="h-4 w-4 text-[#b91c32]" />
-              <span>Directions on Maps</span>
+              <span>{pick("Directions on Maps", "मॅपवर रस्ता पहा")}</span>
             </a>
           </div>
         </div>

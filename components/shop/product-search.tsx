@@ -4,10 +4,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "@/lib/translations";
 
 export function ProductSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
   const [query, setQuery] = useState(searchParams.get("search") || "");
   const [isPending, startTransition] = useTransition();
 
@@ -39,7 +41,7 @@ export function ProductSearch() {
       <Input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search crackers by name..."
+        placeholder={t.common.searchPlaceholder}
         className="pl-9 pr-9 bg-white border-[#e9e0d5] h-10 rounded-[10px] text-xs sm:text-[13px] text-[#202d3a] placeholder:text-[#737373]"
       />
       {isPending && (

@@ -6,6 +6,7 @@ import { formatCurrency } from "@/lib/format";
 import { ScreenshotUpload } from "@/components/checkout/screenshot-upload";
 import { Copy, Check, ShieldCheck, QrCode } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { useTranslation } from "@/lib/translations";
 import { toast } from "sonner";
 
 interface PaymentPanelProps {
@@ -21,13 +22,16 @@ export function PaymentPanel({
   onScreenshotSelect,
   screenshotError,
 }: PaymentPanelProps) {
+  const { locale } = useTranslation();
   const [copied, setCopied] = useState(false);
   const upiId = settings.upi_id || "9561851896@ybl";
 
   const handleCopyUpi = () => {
     navigator.clipboard.writeText(upiId);
     setCopied(true);
-    toast.success("UPI ID copied to clipboard!");
+    toast.success(
+      locale === "mr" ? "UPI ID कॉपी करण्यात आला!" : "UPI ID copied to clipboard!"
+    );
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -46,17 +50,21 @@ export function PaymentPanel({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#e9e0d5] pb-4 gap-3">
         <div>
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#737373] block">
-            Step 3 of 4 · Payment
+            {locale === "mr" ? "टप्पा ३ · पेमेंट" : "Step 3 of 4 · Payment"}
           </span>
           <h3 className="text-base sm:text-lg font-bold text-[#202d3a]">
-            Scan UPI QR & Upload Proof
+            {locale === "mr" ? "UPI क्यूआर स्कॅन करा व पुरावा जोडा" : "Scan UPI QR & Upload Proof"}
           </h3>
           <p className="text-xs text-[#737373] mt-0.5">
-            Use Google Pay, PhonePe, Paytm, or any BHIM UPI app
+            {locale === "mr"
+              ? "Google Pay, PhonePe, Paytm किंवा कोणत्याही UPI अ‍ॅपचा वापर करा"
+              : "Use Google Pay, PhonePe, Paytm, or any BHIM UPI app"}
           </p>
         </div>
         <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start bg-[#fbecef] p-3 sm:p-2.5 rounded-xl border border-[#b91c32]/20">
-          <span className="text-[11px] text-[#737373] font-medium">Total Amount Due</span>
+          <span className="text-[11px] text-[#737373] font-medium">
+            {locale === "mr" ? "एकूण देय रक्कम" : "Total Amount Due"}
+          </span>
           <span className="text-lg sm:text-xl font-black text-[#b91c32] font-mono">
             {formatCurrency(total)}
           </span>
@@ -76,7 +84,9 @@ export function PaymentPanel({
           </div>
           <div className="flex items-center gap-1.5 text-[11px] text-[#737373] mt-2.5">
             <QrCode className="h-3.5 w-3.5 text-[#b91c32]" />
-            <span>Scan with any UPI app</span>
+            <span>
+              {locale === "mr" ? "कोणत्याही UPI अ‍ॅपने स्कॅन करा" : "Scan with any UPI app"}
+            </span>
           </div>
         </div>
 
@@ -88,7 +98,9 @@ export function PaymentPanel({
                 1
               </span>
               <p className="pt-0.5 leading-relaxed text-[#737373]">
-                Open your UPI app and scan the QR code, or copy the UPI ID below.
+                {locale === "mr"
+                  ? "तुमचे UPI अ‍ॅप उघडा आणि हा क्यूआर कोड स्कॅन करा किंवा खालील UPI ID कॉपी करा."
+                  : "Open your UPI app and scan the QR code, or copy the UPI ID below."}
               </p>
             </div>
             <div className="flex items-start gap-2.5">
@@ -96,7 +108,17 @@ export function PaymentPanel({
                 2
               </span>
               <p className="pt-0.5 leading-relaxed text-[#737373]">
-                Pay the exact total of <strong className="text-[#202d3a] font-mono">{formatCurrency(total)}</strong> to Akshay Bendbhar.
+                {locale === "mr" ? (
+                  <>
+                    अक्षय बेंडभर यांना अचूक रक्कम{" "}
+                    <strong className="text-[#202d3a] font-mono">{formatCurrency(total)}</strong> ट्रान्सफर करा.
+                  </>
+                ) : (
+                  <>
+                    Pay the exact total of{" "}
+                    <strong className="text-[#202d3a] font-mono">{formatCurrency(total)}</strong> to Akshay Bendbhar.
+                  </>
+                )}
               </p>
             </div>
             <div className="flex items-start gap-2.5">
@@ -104,7 +126,9 @@ export function PaymentPanel({
                 3
               </span>
               <p className="pt-0.5 leading-relaxed text-[#737373]">
-                Save the payment receipt screenshot and upload it below to verify your order.
+                {locale === "mr"
+                  ? "यशस्वी पेमेंटचा स्क्रीनशॉट काढून खाली अपलोड करा."
+                  : "Save the payment receipt screenshot and upload it below to verify your order."}
               </p>
             </div>
           </div>
@@ -113,7 +137,7 @@ export function PaymentPanel({
           <div className="flex items-center gap-2 rounded-xl border border-[#e9e0d5] bg-[#fff9f0] px-4 py-2.5 justify-between">
             <div className="min-w-0">
               <span className="text-[10px] text-[#737373] uppercase font-bold block">
-                Stall UPI ID
+                {locale === "mr" ? "स्टॉल UPI ID" : "Stall UPI ID"}
               </span>
               <span className="text-xs font-mono font-bold text-[#202d3a] truncate block">
                 {upiId}
@@ -127,12 +151,12 @@ export function PaymentPanel({
               {copied ? (
                 <>
                   <Check className="h-3.5 w-3.5 text-emerald-600" />
-                  <span className="text-emerald-700">Copied</span>
+                  <span className="text-emerald-700">{locale === "mr" ? "कॉपी झाले" : "Copied"}</span>
                 </>
               ) : (
                 <>
                   <Copy className="h-3.5 w-3.5" />
-                  <span>Copy</span>
+                  <span>{locale === "mr" ? "कॉपी" : "Copy"}</span>
                 </>
               )}
             </button>
@@ -141,7 +165,9 @@ export function PaymentPanel({
           <div className="flex items-center gap-1.5 text-[11px] text-[#737373]">
             <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
             <span>
-              Verified Merchant: Akshay Bendbhar ({siteConfig.name.mr}, Ganegaon Khalsa)
+              {locale === "mr"
+                ? `सत्यापित मर्चंट: ${siteConfig.owner.mr} (${siteConfig.name.mr}, गणेगाव खालसा)`
+                : `Verified Merchant: ${siteConfig.owner.en} (${siteConfig.name.mr}, Ganegaon Khalsa)`}
             </span>
           </div>
         </div>

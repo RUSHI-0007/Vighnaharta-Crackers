@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import type { Category } from "@/types";
+import { useTranslation } from "@/lib/translations";
 import { ArrowRight } from "lucide-react";
 
 const categoryImages: Record<string, string> = {
@@ -11,6 +14,8 @@ const categoryImages: Record<string, string> = {
 };
 
 export function CategoryGrid({ categories }: { categories: Category[] }) {
+  const { t, locale, pick } = useTranslation();
+
   return (
     <section id="categories" className="py-12 sm:py-16 bg-[#fff9f0] border-b border-[#e9e0d5]">
       <div className="container mx-auto max-w-6xl px-4 sm:px-8">
@@ -18,13 +23,13 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
         {/* Section Header */}
         <div className="mb-8 sm:mb-10 text-left">
           <p className="font-bold text-[#b91c32] text-[11px] tracking-[2px] uppercase">
-            DISCOVER THE COLLECTION
+            {t.categories.badge}
           </p>
           <h2 className="font-heading font-semibold text-[#202d3a] text-3xl sm:text-[40px] leading-[1.15] mt-1.5">
-            Made for memory-making.
+            {t.categories.heading}
           </h2>
           <p className="text-[#737373] text-[14px] sm:text-[15px] mt-1 max-w-xl">
-            From hand-held sparklers to sky-filling colours. Explore what fits your family celebration.
+            {t.categories.desc}
           </p>
         </div>
 
@@ -35,6 +40,9 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
               categoryImages[cat.slug] ||
               "/images/product-placeholder.webp";
 
+            const primaryName = locale === "mr" ? cat.name_mr : cat.name_en;
+            const secondaryName = locale === "mr" ? cat.name_en : cat.name_mr;
+
             return (
               <Link
                 key={cat.id}
@@ -44,7 +52,7 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
                 <div className="h-[140px] sm:h-[180px] w-full relative rounded-[10px] overflow-hidden mb-3 bg-[#f5eddf]">
                   <Image
                     src={imageSrc}
-                    alt={cat.name_en}
+                    alt={primaryName}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -53,13 +61,13 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
 
                 <div className="flex items-center justify-between">
                   <h3 className="font-heading font-medium text-[#202d3a] group-hover:text-[#b91c32] text-[16px] sm:text-[18px] transition-colors line-clamp-1">
-                    {cat.name_en}
+                    {primaryName}
                   </h3>
                   <ArrowRight className="h-4 w-4 text-[#b91c32] group-hover:translate-x-1 transition-transform shrink-0" />
                 </div>
 
-                <p className="text-[#737373] text-[11px] sm:text-[12px] mt-0.5 line-clamp-1">
-                  {cat.name_mr} • Wholesale Packs
+                <p className="text-[#737373] text-[11px] sm:text-[12px] mt-0.5 line-clamp-1 font-body">
+                  {secondaryName} • {pick("Wholesale Packs", "होलसेल बॉक्स")}
                 </p>
               </Link>
             );
@@ -74,10 +82,13 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
             </span>
             <div>
               <p className="font-heading font-medium text-[#202d3a] text-[16px]">
-                Pick your festive favourites
+                {pick("Pick your festive favourites", "आवडीचे फटाके निवडा")}
               </p>
               <p className="text-[#737373] text-[12px] mt-0.5 leading-relaxed">
-                Browse our packaged crackers with honest wholesale pricing and clear pack sizes.
+                {pick(
+                  "Browse our packaged crackers with honest wholesale pricing and clear pack sizes.",
+                  "पारदर्शक होलसेल दर आणि खात्रीशीर पॅकिंगसह फटाके निवडा."
+                )}
               </p>
             </div>
           </div>
@@ -88,10 +99,13 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
             </span>
             <div>
               <p className="font-heading font-medium text-[#202d3a] text-[16px]">
-                Choose pickup or delivery
+                {pick("Choose pickup or delivery", "पिकअप किंवा डिलिव्हरी निवडा")}
               </p>
               <p className="text-[#737373] text-[12px] mt-0.5 leading-relaxed">
-                Collect in person from our Ganegaon Khalsa stall or select local delivery options.
+                {pick(
+                  "Collect in person from our Ganegaon Khalsa stall or select local delivery options.",
+                  "गणेगाव खालसा स्टॉलवरून थेट घेऊन जा किंवा स्थानिक डिलिव्हरी पर्याय निवडा."
+                )}
               </p>
             </div>
           </div>
@@ -102,10 +116,13 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
             </span>
             <div>
               <p className="font-heading font-medium text-[#202d3a] text-[16px]">
-                Pay via UPI or Cash on Delivery
+                {pick("Pay via UPI or Cash on Delivery", "UPI किंवा कॅश ऑन डिलिव्हरी")}
               </p>
               <p className="text-[#737373] text-[12px] mt-0.5 leading-relaxed">
-                Instant UPI payment with screenshot verification or cash upon receiving your order.
+                {pick(
+                  "Instant UPI payment with screenshot verification or cash upon receiving your order.",
+                  "झटपट UPI पेमेंट किंवा फटाके मिळाल्यावर रोख रक्कम देऊन ऑर्डर पूर्ण करा."
+                )}
               </p>
             </div>
           </div>

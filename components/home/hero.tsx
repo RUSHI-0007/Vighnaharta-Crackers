@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
+import { useTranslation } from "@/lib/translations";
 import { ArrowRight, Package, MapPin, Handshake } from "lucide-react";
 
 export function Hero() {
+  const { t, locale } = useTranslation();
+
   return (
     <section className="bg-[#b91c32] text-white">
       {/* 1. Main Festive Banner Container */}
@@ -14,19 +19,19 @@ export function Hero() {
           <div className="lg:col-span-7 space-y-4 sm:space-y-6 text-left">
             <div className="space-y-1">
               <span className="text-[11px] sm:text-[13px] tracking-[3px] text-[#e9b94f] font-semibold uppercase block">
-                FESTIVE SEASON COLLECTION
+                {t.hero.badge}
               </span>
               <p className="font-heading text-lg sm:text-xl text-[#f5eddf] font-medium">
-                {siteConfig.name.mr}
+                {locale === "mr" ? siteConfig.name.mr : siteConfig.name.en}
               </p>
             </div>
 
-            <h1 className="font-heading font-medium text-white text-4xl sm:text-6xl lg:text-[72px] leading-[1.05] tracking-tight">
-              Make room for a little more wonder.
+            <h1 className="font-heading font-medium text-white text-3xl sm:text-5xl lg:text-[68px] leading-[1.08] tracking-tight">
+              {t.hero.headline}
             </h1>
 
             <p className="text-[#f5eddf] text-sm sm:text-base max-w-lg leading-relaxed font-normal">
-              Bright, crackling moments for your family Diwali. Thoughtfully packaged, fairly priced, and ready for you in Ganegaon Khalsa.
+              {t.hero.subheading}
             </p>
 
             <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-4">
@@ -34,7 +39,7 @@ export function Hero() {
                 href="/shop"
                 className="bg-[#e9b94f] hover:bg-[#d4a339] text-[#202d3a] font-semibold text-xs sm:text-sm h-12 px-6 rounded-[10px] inline-flex items-center gap-2 transition-all active:scale-95 shadow-md"
               >
-                <span>Explore the collection</span>
+                <span>{t.hero.exploreCollection}</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
 
@@ -42,7 +47,7 @@ export function Hero() {
                 href="/contact"
                 className="border border-white/30 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm h-12 px-6 rounded-[10px] inline-flex items-center gap-2 transition-colors"
               >
-                <span>Find our stall</span>
+                <span>{t.hero.findOurStall}</span>
               </Link>
             </div>
           </div>
@@ -71,10 +76,10 @@ export function Hero() {
             <Package className="h-6 w-6 text-[#202d3a] shrink-0" />
             <div>
               <p className="font-semibold text-[#202d3a] text-[13px]">
-                Thoughtfully selected
+                {t.hero.promise1Title}
               </p>
               <p className="text-[#737373] text-[11px]">
-                Clear pack sizes and honest wholesale pricing.
+                {t.hero.promise1Desc}
               </p>
             </div>
           </div>
@@ -83,10 +88,10 @@ export function Hero() {
             <MapPin className="h-6 w-6 text-[#202d3a] shrink-0" />
             <div>
               <p className="font-semibold text-[#202d3a] text-[13px]">
-                Local, not long-distance
+                {t.hero.promise2Title}
               </p>
               <p className="text-[#737373] text-[11px]">
-                Stall pickup & local service in Ganegaon Khalsa.
+                {t.hero.promise2Desc}
               </p>
             </div>
           </div>
@@ -95,10 +100,10 @@ export function Hero() {
             <Handshake className="h-6 w-6 text-[#202d3a] shrink-0" />
             <div>
               <p className="font-semibold text-[#202d3a] text-[13px]">
-                A real stall, a real team
+                {t.hero.promise3Title}
               </p>
               <p className="text-[#737373] text-[11px]">
-                Managed personally by {siteConfig.owner.en}.
+                {t.hero.promise3Desc}
               </p>
             </div>
           </div>

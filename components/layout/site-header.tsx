@@ -8,17 +8,22 @@ import { siteConfig } from "@/config/site";
 import { useCartStore } from "@/store/cart-store";
 import { computeCartTotals } from "@/lib/pricing";
 import { useMounted } from "@/hooks/use-mounted";
+import { useTranslation } from "@/lib/translations";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import {
   ShoppingBag,
   Search,
   MapPin,
   Menu,
   X,
+  ShieldCheck,
+  ArrowRight,
 } from "lucide-react";
 
 export function SiteHeader() {
   const router = useRouter();
   const mounted = useMounted();
+  const { t, locale, pick } = useTranslation();
   const items = useCartStore((s) => s.items);
   const { totalCount } = useMemo(() => computeCartTotals(items), [items]);
 
@@ -35,12 +40,15 @@ export function SiteHeader() {
 
   return (
     <header className="w-full z-40 bg-[#fff9f0] border-b border-[#e9e0d5]">
-      {/* 1. Local Service Announcement Bar */}
-      <div className="bg-[#b91c32] text-white text-[11px] h-[32px] px-4 flex items-center justify-center font-medium tracking-[0.4px]">
-        <div className="container mx-auto flex items-center justify-center gap-2 text-center truncate">
-          <span>{siteConfig.tagline.en}</span>
-          <span className="hidden sm:inline">•</span>
-          <span className="hidden sm:inline">{siteConfig.address.en} (Local Delivery & Pickup)</span>
+      {/* 1. Local Service Announcement Bar with Language Toggle */}
+      <div className="bg-[#b91c32] text-white text-[11px] h-[34px] px-4 flex items-center justify-between font-medium tracking-[0.4px]">
+        <div className="container mx-auto flex items-center justify-between gap-3 text-center">
+          <div className="flex items-center gap-2 truncate">
+            <span>{t.common.tagline}</span>
+            <span className="hidden md:inline">•</span>
+            <span className="hidden md:inline">{t.common.address}</span>
+          </div>
+          <LanguageSwitcher variant="minimal" className="shrink-0" />
         </div>
       </div>
 
@@ -71,12 +79,12 @@ export function SiteHeader() {
         {/* Search Bar (Desktop) */}
         <form
           onSubmit={handleSearch}
-          className="hidden md:flex flex-1 max-w-[480px] h-[44px] items-center bg-white border border-[#e9e0d5] rounded-[10px] px-4 gap-3 shadow-2xs"
+          className="hidden md:flex flex-1 max-w-[440px] h-[44px] items-center bg-white border border-[#e9e0d5] rounded-[10px] px-4 gap-3 shadow-2xs"
         >
           <Search className="h-[18px] w-[18px] text-[#737373] shrink-0" />
           <input
             type="text"
-            placeholder="Find your festive favourites..."
+            placeholder={t.common.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-transparent text-[13px] text-[#202d3a] placeholder-[#737373] focus:outline-hidden"
@@ -84,16 +92,21 @@ export function SiteHeader() {
         </form>
 
         {/* Shop Actions */}
-        <div className="flex items-center gap-5 sm:gap-6 shrink-0">
+        <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+          {/* Desktop Language Switcher */}
+          <div className="hidden lg:block">
+            <LanguageSwitcher />
+          </div>
+
           {/* Location Chip (Desktop) */}
-          <div className="hidden lg:flex items-center gap-2">
+          <div className="hidden xl:flex items-center gap-2">
             <MapPin className="h-5 w-5 text-[#b91c32] shrink-0" />
             <div className="flex flex-col leading-tight">
               <span className="text-[#737373] text-[10px] font-medium tracking-wide">
-                LOCAL TO YOU
+                {t.common.localToYou}
               </span>
               <span className="text-[#202d3a] text-[12px] font-medium truncate max-w-[130px]">
-                {siteConfig.address.en.split(",").pop()?.trim() || "Ganegaon Khalsa"}
+                {pick("Ganegaon Khalsa", "गणेगाव खालसा")}
               </span>
             </div>
           </div>
@@ -112,7 +125,7 @@ export function SiteHeader() {
               )}
             </div>
             <span className="font-semibold text-[13px] hidden sm:inline">
-              Cart ({mounted ? totalCount : 0})
+              {t.common.cart} ({mounted ? totalCount : 0})
             </span>
           </Link>
         </div>
@@ -120,87 +133,118 @@ export function SiteHeader() {
 
       {/* 3. Category Navigation Strip */}
       <div className="border-t border-[#e9e0d5] px-4 sm:px-8 lg:px-20 h-[48px] flex items-center justify-between text-[12px] overflow-x-auto scrollbar-none whitespace-nowrap bg-[#fff9f0]">
-        <div className="flex items-center gap-6 sm:gap-8">
+        <div className="flex items-center gap-5 sm:gap-7">
           <Link
             href="/shop"
             className="font-semibold text-[#b91c32] hover:underline"
           >
-            Shop all crackers
+            {t.common.shopAll}
           </Link>
           <Link
             href="/shop?category=sparklers"
             className="font-medium text-[#202d3a] hover:text-[#b91c32] transition-colors"
           >
-            Sparklers
+            {pick("Sparklers", "फुलबाजे")}
           </Link>
           <Link
             href="/shop?category=flower-pots"
             className="font-medium text-[#202d3a] hover:text-[#b91c32] transition-colors"
           >
-            Flower pots
+            {pick("Flower pots", "अनार")}
           </Link>
           <Link
             href="/shop?category=ground-chakkars"
             className="font-medium text-[#202d3a] hover:text-[#b91c32] transition-colors"
           >
-            Ground chakkars
+            {pick("Ground chakkars", "भुईचक्र")}
           </Link>
           <Link
             href="/shop?category=sky-shots"
             className="font-medium text-[#202d3a] hover:text-[#b91c32] transition-colors"
           >
-            Aerial fireworks
+            {pick("Aerial fireworks", "स्काय शॉट्स")}
           </Link>
           <Link
             href="/shop?category=gift-boxes"
             className="font-medium text-[#202d3a] hover:text-[#b91c32] transition-colors"
           >
-            Festive boxes
+            {pick("Festive boxes", "गिफ्ट बॉक्स")}
           </Link>
           <Link
             href="/price-list"
             className="font-medium text-[#202d3a] hover:text-[#b91c32] transition-colors"
           >
-            Price list
+            {t.common.priceList}
           </Link>
         </div>
 
-        <Link
-          href="/contact"
-          className="font-semibold text-[#b91c32] hover:underline ml-6 hidden md:inline shrink-0"
-        >
-          Delivery & help ↗
-        </Link>
+        <div className="hidden md:flex items-center gap-4 ml-6 shrink-0">
+          <Link
+            href="/contact"
+            className="font-semibold text-[#b91c32] hover:underline"
+          >
+            {t.common.deliveryAndHelp}
+          </Link>
+          <span className="text-[#e9e0d5]">|</span>
+          <Link
+            href="/admin"
+            className="inline-flex items-center gap-1.5 font-semibold text-[#202d3a] hover:text-[#b91c32] transition-colors"
+          >
+            <ShieldCheck className="h-3.5 w-3.5 text-[#b91c32]" />
+            <span>{t.common.adminPortal}</span>
+          </Link>
+        </div>
       </div>
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-[#e9e0d5] bg-[#fff9f0] px-4 py-3 space-y-2 text-xs font-medium text-[#202d3a]">
+          <div className="flex items-center justify-between pb-2.5 mb-2 border-b border-[#e9e0d5]">
+            <span className="text-[#737373] text-[11px] font-semibold">
+              {locale === "mr" ? "भाषा निवडा:" : "Choose Language:"}
+            </span>
+            <LanguageSwitcher />
+          </div>
           <form onSubmit={handleSearch} className="flex items-center bg-white border border-[#e9e0d5] rounded-[10px] px-3 py-2 mb-3">
             <Search className="h-4 w-4 text-[#737373] mr-2 shrink-0" />
             <input
               type="text"
-              placeholder="Search firecrackers..."
+              placeholder={t.common.searchMobilePlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-transparent text-xs text-[#202d3a] focus:outline-hidden"
             />
           </form>
           <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-[#b91c32]">
-            Home
+            {t.common.home}
           </Link>
           <Link href="/shop" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 font-semibold text-[#b91c32]">
-            Shop all crackers
+            {t.common.shopAll}
           </Link>
           <Link href="/price-list" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-[#b91c32]">
-            Price list
+            {t.common.priceList}
           </Link>
           <Link href="/track" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-[#b91c32]">
-            Track Order
+            {t.common.trackOrder}
           </Link>
           <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-[#b91c32]">
-            Delivery & help
+            {t.common.deliveryAndHelp}
           </Link>
+          <div className="pt-2 border-t border-[#e9e0d5] mt-2">
+            <Link
+              href="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between w-full px-3 py-2 rounded-[8px] bg-[#f5eddf] hover:bg-[#e9e0d5] text-[#202d3a] font-semibold text-xs transition-colors border border-[#e9e0d5]"
+            >
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-[#b91c32]" />
+                <span className="font-heading font-medium text-[13px] text-[#b91c32]">
+                  {locale === "mr" ? "स्टॉल अ‍ॅडमिन पोर्टल" : "Stall Admin Portal"}
+                </span>
+              </div>
+              <ArrowRight className="h-3.5 w-3.5 text-[#b91c32]" />
+            </Link>
+          </div>
         </div>
       )}
     </header>
