@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
-import { ArrowRight, Sparkles, Package, MapPin, Handshake } from "lucide-react";
+import { ArrowRight, Package, MapPin, Handshake } from "lucide-react";
 
 export function Hero() {
   return (
@@ -47,23 +47,17 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right: Still Life Photograph */}
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="relative rounded-[16px] overflow-hidden w-full max-w-[500px] h-[320px] sm:h-[400px] shadow-xl border border-white/10">
+          {/* Right: Official Stall Banner Poster */}
+          <div className="lg:col-span-5 flex justify-center w-full">
+            <div className="relative rounded-[16px] overflow-hidden w-full max-w-[500px] aspect-[3/2] shadow-2xl border-2 border-white/20 bg-[#202d3a]">
               <Image
-                src="/images/hero-festive.webp"
-                alt="Festive Cracker Collection"
+                src="/images/hero-poster.webp"
+                alt="विघ्नहर्ता फटाका स्टॉल - Akshay Bendbhar"
                 fill
                 priority
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 500px"
               />
-              <div className="absolute bottom-4 left-4 bg-[#fff9f0] text-[#b91c32] rounded-[10px] px-4 py-2.5 flex items-center gap-3 shadow-md">
-                <span className="font-heading font-medium text-[16px] sm:text-[18px]">
-                  The joy is in the choosing.
-                </span>
-                <Sparkles className="h-4 w-4 text-[#b91c32]" />
-              </div>
             </div>
           </div>
 
